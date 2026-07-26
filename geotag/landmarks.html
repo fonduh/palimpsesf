@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PALIMPSESF — landmark timelines</title>
+<style>
+  @font-face{font-family:'Metana';src:url('../fonts/NeueMetanaMono-Light.otf') format('opentype');font-weight:300}
+  @font-face{font-family:'Metana';src:url('../fonts/NeueMetanaMono-SemiBold.otf') format('opentype');font-weight:600}
+  @font-face{font-family:'Whois';src:url('../fonts/whois-mono.woff') format('woff')}
+  :root{--bg:#e9e6db;--paper:#f3f1e8;--ink:#0e0e10;--soft:#55524a;--pastel:#eaf1fb;--blue:#2456d6;
+    --disp:'Metana',ui-monospace,monospace;--mono:'Whois',ui-monospace,Menlo,monospace}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);
+    background-image:repeating-linear-gradient(0deg,transparent 0 27px,rgba(14,14,16,.05) 27px 28px)}
+  header{display:flex;gap:2px;align-items:stretch;flex-wrap:wrap;padding:10px 10px 0}
+  .hmod{border:2.5px solid var(--ink);background:var(--paper);padding:10px 14px}
+  h1{font-family:var(--disp);font-weight:600;font-size:24px;margin:0;line-height:1}
+  h1 a{color:inherit;text-decoration:none}
+  h1 .ghost{opacity:.28}
+  h1 .sf{color:var(--blue)}
+  .meta{font-size:10px;color:var(--soft);text-transform:uppercase;letter-spacing:.06em;line-height:1.6;align-self:center}
+  .meta a{color:inherit;border-bottom:2px solid var(--blue);text-decoration:none}
+  .meta a:hover{background:var(--blue);color:var(--paper)}
+  .count{font-family:var(--disp);font-weight:600;font-size:24px;margin-left:auto;display:flex;align-items:center}
+  main{max-width:1120px;margin:0 auto;padding:12px 10px 60px;display:grid;gap:2px}
+  .lbl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.65}
+  /* landmark picker — ‹ › walk the register, the select jumps anywhere */
+  .nav{display:flex;gap:2px}
+  .cbtn{font-family:var(--disp);font-weight:600;font-size:14px;text-transform:uppercase;
+    border:2.5px solid var(--ink);background:var(--pastel);color:var(--ink);padding:8px 16px;cursor:pointer}
+  .cbtn:hover{background:var(--ink);color:var(--pastel)}
+  #sel{flex:1;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.04em;
+    border:2.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 10px}
+  /* the viewer: carousel left, description right */
+  .lm{border:2.5px solid var(--ink);background:var(--paper);padding:16px;display:grid;gap:18px;grid-template-columns:1fr}
+  @media(min-width:900px){.lm{grid-template-columns:minmax(0,1.05fr) 1fr}}
+  .lmname{font-family:var(--disp);font-weight:600;font-size:22px;line-height:1.15;text-transform:uppercase;margin-top:2px}
+  .facts{font-size:11.5px;line-height:1.7;margin-top:6px}
+  .facts b{font-family:var(--disp)}
+  /* the carousel: photographs float free on a ring, newest facing you; scroll left to go
+     back in time, right to come forward — no frames, just the photo and its year */
+  .stage{position:relative;height:330px;perspective:1200px;overflow:hidden;touch-action:pan-y}
+  .stage.empty{display:flex;align-items:center;justify-content:center}
+  .ring{position:absolute;inset:0;transform-style:preserve-3d;
+    transition:transform .65s cubic-bezier(.2,.8,.25,1)}
+  .pcard{position:absolute;left:50%;top:44px;width:270px;margin-left:-135px;cursor:pointer;
+    backface-visibility:hidden;opacity:.55;transition:opacity .45s}
+  .pcard.front{opacity:1;cursor:w-resize}
+  .pcard img{width:100%;height:170px;object-fit:cover;display:block;
+    filter:grayscale(1) sepia(.32) contrast(.96) brightness(1.02);
+    opacity:0;transition:opacity .3s}
+  .pcard img.ld{opacity:1}
+  .pcard .pyr{font-family:var(--disp);font-weight:600;font-size:15px;margin-top:6px;letter-spacing:.04em}
+  .crow{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .crow .lbl{flex:1;text-align:center}
+  /* the year ruler: the carousel seen sideways — click a year to face that layer */
+  .ruler{position:relative;height:46px;margin:12px 4px 0}
+  .rline{position:absolute;left:0;right:0;top:12px;height:1.5px;background:var(--ink)}
+  .rmark{position:absolute;top:6px;transform:translateX(-50%);text-align:center}
+  .rmark i{display:block;width:7px;height:13px;background:var(--ink);margin:0 auto}
+  .rmark span{font-size:8px;display:block;margin-top:2px;opacity:.7}
+  .rmark.built i{background:var(--blue);width:9px}
+  /* designation in yellow — a legal event, distinct from the blue photographic record */
+  .rmark.designated i{background:none;border:2px solid #d9a400;height:9px}
+  .rmark.occupant i{height:8px;opacity:.6}
+  .rmark.permit i{width:5px;height:11px;background:#8a7f66}
+  .rmark.now i{background:var(--ink);width:9px}
+  .rmark.link{cursor:pointer}
+  .rmark.link:hover span{opacity:1;font-weight:700}
+  .rmark i{transition:transform .45s cubic-bezier(.2,.8,.25,1)}
+  .rmark.link.on i{background:var(--blue);transform:scaleY(1.7) scaleX(1.5)}
+  .rmark.link.on span{color:var(--blue);opacity:1;font-weight:700}
+  /* the cursor: rides the ruler to whichever year faces you */
+  .rcur{position:absolute;top:-3px;width:3px;height:24px;background:var(--blue);
+    transform:translateX(-50%);transition:left .6s cubic-bezier(.2,.8,.25,1);pointer-events:none}
+  .rends{position:absolute;left:0;right:0;top:26px;display:flex;justify-content:space-between;
+    font-size:8px;opacity:.45}
+  /* the blurb: whichever photograph faces you, described in full */
+  .blurb{border-top:1.5px dotted var(--ink);margin-top:14px;padding-top:12px;
+    font-size:11px;line-height:1.7;text-transform:uppercase;letter-spacing:.03em;max-width:60ch}
+  .blurb .byr{display:block;font-family:var(--disp);font-weight:600;font-size:24px;text-transform:none;margin-bottom:4px}
+  .blurb .bsrc{display:block;font-size:9px;opacity:.5;margin-top:6px}
+  /* the stories — the written descriptions live in the panel */
+  .story{border-top:1.5px dotted var(--ink);margin-top:14px;padding-top:12px}
+  .story h3{font-family:var(--disp);font-weight:600;font-size:13px;text-transform:uppercase;margin:0 0 6px}
+  .story p{font-size:12.5px;line-height:1.75;margin:0;max-width:76ch}
+  .story .note{font-size:10.5px;line-height:1.6;opacity:.75;margin-top:8px;max-width:76ch;
+    border-left:2px solid var(--ink);padding-left:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="hmod">
+    <h1><a href="../palimpsest.html"><span class="ghost">palimpse</span><span class="sf">sf</span></a></h1>
+    <div class="lbl" style="margin-top:3px">landmark timelines</div>
+  </div>
+  <div class="hmod meta">
+    every designated SF landmark, read as a column of time —<br>
+    built · photographed · occupied · designated · now
+  </div>
+  <div class="hmod meta">
+    the photographs live in the public archives —<br>
+    <a href="https://digitalsf.org" target="_blank" rel="noopener">SFPL DigitalSF</a> ·
+    <a href="https://opensfhistory.org" target="_blank" rel="noopener">OpenSFHistory</a> ·
+    <a href="https://calisphere.org" target="_blank" rel="noopener">Calisphere</a> ·
+    <a href="https://www.foundsf.org" target="_blank" rel="noopener">FoundSF</a> ·
+    <a href="https://archive.org" target="_blank" rel="noopener">Internet Archive</a>
+  </div>
+  <div class="hmod meta"><a href="map.html"><b>← map</b></a></div>
+  <div class="hmod count" id="count">…</div>
+</header>
+<main>
+  <div class="nav">
+    <button class="cbtn" id="prevL" title="previous landmark">‹</button>
+    <select id="sel" aria-label="choose a landmark"></select>
+    <button class="cbtn" id="nextL" title="next landmark">›</button>
+  </div>
+  <section class="lm" id="viewer"></section>
+</main>
+<script src="landmarks-data.js"></script>
+<script src="lm.js?v=11"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PALIMPSESF — write</title>
+<style>
+  @font-face{font-family:'Metana';src:url('../fonts/NeueMetanaMono-Light.otf') format('opentype');font-weight:300}
+  @font-face{font-family:'Metana';src:url('../fonts/NeueMetanaMono-SemiBold.otf') format('opentype');font-weight:600}
+  @font-face{font-family:'Whois';src:url('../fonts/whois-mono.woff') format('woff')}
+  :root{--bg:#e9e6db;--paper:#f3f1e8;--ink:#0e0e10;--pastel:#eaf1fb;--blue:#2456d6;
+    --disp:'Metana',ui-monospace,monospace;--mono:'Whois',ui-monospace,Menlo,monospace}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);
+    background-image:repeating-linear-gradient(0deg,transparent 0 27px,rgba(14,14,16,.05) 27px 28px)}
+  header{display:flex;gap:2px;align-items:stretch;flex-wrap:wrap;padding:10px 10px 0}
+  .hmod{border:2.5px solid var(--ink);background:var(--paper);padding:10px 14px}
+  h1{font-family:var(--disp);font-weight:600;font-size:24px;margin:0;line-height:1}
+  h1 a{color:inherit;text-decoration:none}
+  h1 .ghost{opacity:.28}
+  h1 .sf{color:var(--blue)}
+  .lbl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.65}
+  .meta{font-size:10px;text-transform:uppercase;letter-spacing:.06em;line-height:1.6;align-self:center;color:#55524a}
+  main{max-width:900px;margin:0 auto;padding:12px 10px 80px;display:grid;gap:2px}
+  .mod{border:2.5px solid var(--ink);background:var(--paper);padding:14px 16px}
+  input[type=text],textarea,select{font-family:var(--mono);font-size:13px;border:2px solid var(--ink);
+    background:#fff;color:var(--ink);padding:8px;width:100%}
+  textarea{min-height:260px;line-height:1.7;resize:vertical}
+  button{font-family:var(--disp);font-weight:600;font-size:12px;text-transform:uppercase;
+    border:2.5px solid var(--ink);background:var(--pastel);color:var(--ink);padding:8px 16px;cursor:pointer}
+  button:hover{background:var(--ink);color:var(--pastel)}
+  .refs{display:flex;gap:6px;overflow-x:auto;padding:6px 0}
+  .refs img{height:90px;border:2px solid var(--ink);opacity:0}
+  .mine{border-top:1.5px dotted var(--ink);margin-top:8px;padding-top:8px;font-size:12px;line-height:1.6}
+  .mine b{font-family:var(--disp);cursor:pointer}
+</style>
+</head>
+<body>
+<header>
+  <div class="hmod">
+    <h1><a href="../palimpsest.html"><span class="ghost">palimpse</span><span class="sf">sf</span></a></h1>
+    <div class="lbl" style="margin-top:3px">write — your own stories</div>
+  </div>
+  <div class="hmod meta">
+    pick a parcel, read its evidence, write what you see.<br>
+    stories save in this browser · export merges into the site via stories.json
+  </div>
+  <div class="hmod meta"><a href="map.html" style="color:inherit"><b>← map</b></a></div>
+</header>
+<main>
+  <section class="mod">
+    <div class="lbl">the parcel</div>
+    <select id="lmsel"><option value="">— pick a landmark, or type a parcel below —</option></select>
+    <div style="height:6px"></div>
+    <input type="text" id="blklot" placeholder="or any parcel number (blklot), e.g. 0328001">
+    <div class="refs" id="refs"></div>
+    <div class="lbl" id="refnote"></div>
+  </section>
+  <section class="mod">
+    <div class="lbl">the story</div>
+    <input type="text" id="title" placeholder="title">
+    <div style="height:6px"></div>
+    <textarea id="text" placeholder="what happened on this ground —"></textarea>
+    <div style="height:10px"></div>
+    <button id="save">Save</button>
+    <button id="export">Export stories.json</button>
+    <span class="lbl" id="savestat" style="margin-left:10px"></span>
+    <div class="mine" id="mine"></div>
+  </section>
+</main>
+<script src="landmarks-data.js"></script>
+<script src="write.js?v=1"></script>
+</body>
+</html>

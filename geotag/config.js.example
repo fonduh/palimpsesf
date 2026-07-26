@@ -1,0 +1,5 @@
+// Copy to config.js (gitignored) and fill in. Powers inline street-level "now" imagery.
+// Get a token: mapillary.com/dashboard/developers → Register Application (name: anything,
+// callback: https://localhost/) → copy the Client Token. Read-only, rotatable, designed
+// for client-side use — but keep it out of the public repo anyway.
+window.MAPILLARY_TOKEN = "MLY|xxxx|xxxxxxxx";

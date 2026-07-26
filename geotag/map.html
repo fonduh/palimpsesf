@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PALIMPSESF — the city under the city</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  @font-face{font-family:'Metana';src:url('../fonts/NeueMetanaMono-Light.otf') format('opentype');font-weight:300}
+  @font-face{font-family:'Metana';src:url('../fonts/NeueMetanaMono-SemiBold.otf') format('opentype');font-weight:600}
+  @font-face{font-family:'Whois';src:url('../fonts/whois-mono.woff') format('woff')}
+  :root{--bg:#e9e6db;--paper:#f3f1e8;--ink:#0e0e10;--soft:#55524a;--hatch:rgba(14,14,16,.07);
+    --disp:'Metana',ui-monospace,monospace;--mono:'Whois',ui-monospace,Menlo,monospace;--sh:5px 5px 0 var(--ink);--pastel:#eaf1fb;--gold:#ffd23f}
+  *{box-sizing:border-box} html,body{margin:0;height:100%}
+  body{font-family:var(--mono);color:var(--ink);
+    background:repeating-linear-gradient(0deg,transparent 0 27px,var(--hatch) 27px 28px),
+      repeating-linear-gradient(90deg,transparent 0 27px,var(--hatch) 27px 28px),var(--bg);
+    display:flex;flex-direction:column;height:100vh;padding:10px;gap:2px}
+  /* ---- modular header: butted modules, no gaps ---- */
+  header{display:flex;align-items:stretch;gap:2px;flex-wrap:wrap}
+  .hmod{border:2.5px solid var(--ink);background:var(--paper);padding:10px 14px}
+  h1{font-family:var(--disp);font-weight:600;font-size:24px;letter-spacing:-.02em;margin:0;line-height:1}
+  h1 a{color:inherit;text-decoration:none}
+  h1 .ghost{opacity:.28}
+  h1 .sf{display:inline-block;color:#2456d6}
+  .meta{font-size:10px;color:var(--soft);text-transform:uppercase;letter-spacing:.06em;line-height:1.6;align-self:center}
+  .meta b{color:var(--ink)}
+  .count{font-family:var(--disp);font-weight:600;font-size:24px;margin-left:auto;display:flex;align-items:center}
+  .nearbtn{font-family:var(--disp);font-weight:600;font-size:13px;text-transform:uppercase;border:2.5px solid var(--ink);
+    background:var(--pastel);color:var(--ink);padding:0 16px;cursor:pointer;display:flex;align-items:center;gap:8px}
+  .nearbtn.on{background:var(--ink);color:var(--pastel)}
+  .legend{display:flex;gap:14px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .dot{width:11px;height:11px;border:2px solid var(--ink);display:inline-block}
+  #mapwrap{flex:1;position:relative;min-height:0;border:2.5px solid var(--ink);box-shadow:var(--sh)}
+  #map{position:absolute;inset:0;background:#bfc4c2}
+  /* ---- ambient context dock (hover a dot — no click needed) ---- */
+  #dock{position:absolute;right:12px;top:12px;z-index:900;width:300px;max-height:70%;overflow:auto;
+    border:2.5px solid var(--ink);background:var(--paper);box-shadow:4px 4px 0 rgba(14,14,16,.85);
+    padding:10px 12px;display:none;pointer-events:none}
+  #dock.on{display:block}
+  #dock .dkcap{font-family:var(--disp);font-weight:600;font-size:12.5px;line-height:1.25;text-transform:uppercase;margin-bottom:4px}
+  #dock img{width:100%;border:2px solid var(--ink);margin:4px 0;filter:grayscale(1)}
+  #dock .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+  /* ---- street-level panel (birds-eye -> street continuity at max zoom) ---- */
+  #street{position:absolute;inset:0;z-index:800;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .45s;display:flex;flex-direction:column}
+  #street.on{opacity:1;pointer-events:auto}
+  #street .stbar{display:flex;gap:10px;align-items:center;padding:8px 12px;color:var(--paper);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+  #street .stimg{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #street .stimg img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
+  #street .stbtn{font-family:var(--disp);font-weight:600;font-size:11px;text-transform:uppercase;border:2px solid var(--paper);background:transparent;color:var(--paper);padding:4px 10px;cursor:pointer;margin-left:auto}
+  /* ---- near-me HUD strip ---- */
+  #nearhud{position:absolute;left:12px;right:12px;bottom:12px;z-index:950;display:none;gap:2px;overflow-x:auto;padding-top:34px}
+  #nearhud.on{display:flex}
+  #nearhud .nstat{position:absolute;top:0;left:0;font-family:var(--disp);font-weight:600;font-size:11px;text-transform:uppercase;
+    background:var(--ink);color:var(--pastel);padding:5px 10px;border:2px solid var(--ink)}
+  #nearhud .ncard{flex:0 0 auto;width:150px;border:2.5px solid var(--ink);background:var(--paper);padding:7px;cursor:pointer;box-shadow:3px 3px 0 rgba(14,14,16,.8)}
+  #nearhud .ncard:nth-child(even){transform:rotate(-.7deg)}
+  #nearhud .ncard:nth-child(odd){transform:rotate(.5deg)}
+  #nearhud .ncard:hover{transform:rotate(0) translateY(-3px)}
+  #nearhud .ncard .dirtag{color:#c9282d}
+  #nearhud .ncard img{width:100%;height:76px;object-fit:cover;border:1.5px solid var(--ink);filter:grayscale(1)}
+  #nearhud .ncard .nc1{font-family:var(--mono);font-size:9px;line-height:1.3;text-transform:uppercase;margin-top:4px;max-height:36px;overflow:hidden}
+  #nearhud .ncard .dirtag{font-family:var(--disp);font-weight:600;font-size:10px}
+  /* ---- sweep-reveal cards: hidden photos surfacing under the cursor ---- */
+  .rvcard{width:64px;border:2px solid var(--ink);background:var(--paper);box-shadow:2.5px 2.5px 0 rgba(14,14,16,.75);cursor:pointer;overflow:hidden}
+  .rvcard img{width:100%;height:44px;object-fit:cover;display:block;filter:grayscale(1)}
+  .rvcard .rvyr{font-family:var(--disp);font-weight:600;font-size:9px;text-align:center;padding:1px 0}
+  .rvcard:hover{transform:scale(1.6);z-index:1200!important;position:relative}
+  #map .leaflet-tile{filter:grayscale(1) contrast(1.07) brightness(1.02)}
+  .leaflet-container{font-family:var(--mono);background:#cdd5d8}
+  .leaflet-popup-content-wrapper{border-radius:0;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);background:var(--paper)}
+  .leaflet-popup-tip{display:none}
+  .pop .cap{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:13px;line-height:1.1;margin-bottom:6px}
+  .pop .row{font-size:11px;color:var(--soft);margin:2px 0}
+  .pop .row b{color:var(--ink)}
+  .pop a{display:inline-block;margin-top:8px;font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:11px;
+    color:var(--paper);background:var(--ink);padding:5px 9px;text-decoration:none}
+  .badge{display:inline-block;border:1.5px solid var(--ink);padding:1px 5px;font-size:9px;text-transform:uppercase;margin-top:4px}
+</style>
+</head>
+<body>
+  <header>
+    <div class="hmod">
+      <h1><a href="../palimpsest.html" title="the thesis"><span class="ghost">palimpse</span><span class="sf">sf</span></a></h1>
+      <div class="lbl" style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;opacity:.55;margin-top:3px">the city under the city</div>
+    </div>
+    <div class="hmod meta">
+      photographs pinned to the lots they depict<br>
+      <b>sweep</b> — hidden photos surface · <b>click</b> — fullscreen · <b>zoom</b> — to the street
+    </div>
+    <a class="nearbtn hmod" href="landmarks.html" style="text-decoration:none">◈ Landmarks</a>
+    <a class="nearbtn hmod" href="live.html" style="text-decoration:none">📷 Live</a>
+    <a class="nearbtn hmod" href="guess.html" style="text-decoration:none">🎯 Guess</a>
+    <button class="nearbtn hmod on" id="lampbtn" title="photos hide in the parcels — sweep the cursor to reveal them">🔦 Sweep</button>
+    <button class="nearbtn hmod" id="nearbtn" title="surface photos where you stand">◉ Near me</button>
+    <div class="hmod count" id="count">…</div>
+  </header>
+  <div id="mapwrap">
+    <div id="map"></div>
+    <div id="dock"></div>
+    <div id="street">
+      <div class="stbar"><span id="stlabel">street level — now</span><button class="stbtn" id="stopensv">Open Street View ↗</button><button class="stbtn" id="stback">↑ back to map</button></div>
+      <div class="stimg"><img id="stphoto" alt="street-level imagery"></div>
+    </div>
+    <div id="nearhud"><div class="nstat" id="nstat">◉ locating…</div></div>
+  </div>
+<script src="photos-data.js?v=20260710"></script>
+<script src="moments-data.js?v=20260709"></script>
+<script src="hoods-data.js?v=20260709"></script>
+<script src="landmarks-data.js" onerror="window.LANDMARKS=[]"></script>
+<script src="config.js" onerror=""></script><!-- optional: window.MAPILLARY_TOKEN for inline street-level imagery (gitignored) -->
+<script>
+const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+// ---- pastel palettes: marker color encodes ERA (default) or NEIGHBORHOOD ----
+const MORDER=["gold_rush","silver_metropolis","victorian_city","quake_1906","reconstruction","ppie","jazz_age","depression_bridges","wwii","postwar_redevelopment","counterculture","modern_loma","tech_city"];
+function eraColor(mid){const i=MORDER.indexOf(mid);if(i<0)return"#dfe7ef";const h=196+(i/(MORDER.length-1))*74;return"hsl("+Math.round(h)+",55%,80%)";}   // pastel teal→periwinkle→lavender
+function hoodHue(h){let s=2166136261>>>0;for(let i=0;i<(h||"").length;i++){s^=h.charCodeAt(i);s=Math.imul(s,16777619)>>>0;}return s%360;}
+function hoodColor(h){return h?"hsl("+hoodHue(h)+",45%,82%)":"#e6ecf2";}
+let COLOR_MODE="era";
+function markColor(p){return COLOR_MODE==="hood"?hoodColor(p.hood):eraColor(p.moment);}
+function ptype(p){return p.landmark?"landmark":((p.directory&&p.directory.length)?"directory":"photo");}
+function infoScore(p){return 1+(p.landmark?2:0)+(p.directory?p.directory.length:0);}
+// ---- popup context: era+neighborhood are NOT re-described here (they live in the legend). Just a compact colored tag + the specifics. ----
+function contextHTML(p){
+  const m=(window.MOMENTS||{})[p.moment], hd=(window.HOODS||{})[p.hood];
+  const street=(p.query||"").replace(/,\s*San Francisco.*/i,"").trim();
+  const chip=(t,fill)=>'<span style="display:inline-block;font-family:var(--disp,sans-serif);font-weight:900;text-transform:uppercase;font-size:9px;letter-spacing:.05em;padding:2px 6px;'+(fill?'background:var(--ink,#0e0e10);color:var(--paper,#f3f1e8)':'border:1.5px solid var(--ink,#0e0e10)')+'">'+t+'</span>';
+  let out="";
+  if(p.landmark){const L=p.landmark;const bits=[L.architect&&("arch. "+L.architect),L.built&&("built "+L.built),L.style].filter(Boolean).join(" · ");
+    out+='<div style="margin-bottom:7px">'+chip("◈ Built here",1)+'<div style="font-size:11px;margin-top:4px;line-height:1.4"><b>'+esc(L.name)+'</b>'+(bits?" — "+esc(bits):"")+(L.sig?". "+esc(L.sig):"")+' <span style="opacity:.55">· SF Landmark #'+esc(L.landmarkno)+'</span></div></div>';}
+  if(p.directory&&p.directory.length){
+    const strip=p.directory.map(d=>'<div style="flex:0 0 auto;width:116px;border:1.5px solid var(--ink,#0e0e10);padding:5px;margin-right:6px;background:var(--paper,#f3f1e8)"><div style="font-family:var(--disp,sans-serif);font-weight:900;font-size:13px">'+d.year+'</div>'+(d.img?'<img src="'+d.img+'" loading="lazy" style="width:100%;height:58px;object-fit:cover;object-position:top;border:1px solid var(--ink,#0e0e10);margin:3px 0;filter:grayscale(1)" onerror="this.style.display=\'none\'">':'')+'<div style="font-size:10px;font-weight:700;line-height:1.15">'+esc(d.business)+'</div><div style="font-size:9px;opacity:.65;line-height:1.2">'+esc(d.desc||"")+'</div></div>').join("");
+    out+='<div style="margin-bottom:7px">'+chip("▧ Occupant timeline",0)+'<div style="display:flex;overflow-x:auto;padding:6px 0 2px;border-top:1px dotted var(--ink,#0e0e10);margin-top:4px">'+strip+'</div><div style="font-size:8.5px;opacity:.55">Crocker-Langley / Polk display ads · vision-OCR</div></div>';}
+  if(p.current&&p.current.biz&&p.current.biz.length){
+    const list=p.current.biz.map(b=>'<div style="margin-bottom:1px">'+(b.verified?'<span title="on the map in OpenStreetMap" style="color:#2b7a4b;font-weight:900">✓ </span>':'')+'<b>'+esc(b.name)+'</b>'+(b.type?' <span style="opacity:.6">· '+esc(b.type)+'</span>':'')+(b.since?' <span style="opacity:.5">(since '+b.since+')</span>':'')+'</div>').join("");
+    const kept=(p.current.kept!=null?p.current.kept:p.current.biz.length), act=(p.current.active!=null?p.current.active:p.current.n);
+    const foot=kept+' relevant of '+act+' active registered · DataSF g8m3-pdis, ranked by OpenStreetMap prominence';
+    out+='<div style="margin-bottom:7px">'+chip("▮ Here now",1)+'<div style="font-size:10.5px;margin-top:4px;line-height:1.35">'+list+'</div><div style="font-size:8.5px;opacity:.55">'+foot+'</div></div>';}
+  if(street) out+='<div>'+chip("Here",0)+' <span style="font-size:11px;font-family:var(--mono,monospace)">'+esc(street)+'</span></div>';
+  const tag=(m||hd)?'<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;background:'+eraColor(p.moment)+';border:1.5px solid var(--ink,#0e0e10);padding:3px 7px;margin-bottom:7px;font-family:var(--mono,monospace);font-size:10px">'+(m?'<span><b>'+esc(m.label)+'</b> · '+m.range+'</span>':'')+((m&&hd)?'<span style="opacity:.45">/</span>':'')+(hd?'<span>'+esc(p.hood)+'</span>':'')+'</div>':'';
+  const body=out?'<div style="border-left:3px solid var(--ink,#0e0e10);padding:2px 0 2px 8px">'+out+'</div>':'';
+  return (tag||body)?'<div style="margin-top:7px;border-top:2px solid var(--ink,#0e0e10);padding-top:7px">'+tag+body+'</div>':'';
+}
+const map = L.map("map",{preferCanvas:true,zoomControl:true}).setView([37.7600,-122.4350],12);
+L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {maxZoom:20, attribution:"Imagery © Esri · data: SF Public Library / DigitalSF (OAI-PMH)"}).addTo(map);
+const renderer = L.canvas({padding:0.5});
+const imgTag = id => '<img src="thumbs/'+id+'.jpg" loading="lazy" alt="" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'https://digitalsf.org/nanna/thumbnail/image/'+id+'?version=v2\'}else{this.style.display=\'none\'}" style="display:block;width:100%;border:2px solid var(--ink);margin-bottom:7px;background:#ddd">';
+// ---- icons: neo-vintage lozenge = landmark, awning storefront = Crocker-Langley ad, dot = SFPL photo (size = info amount) ----
+function vintageIcon(col,s){return L.divIcon({className:"",iconSize:[s,s],iconAnchor:[s/2,s/2],html:'<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24"><polygon points="12,1.5 22.5,12 12,22.5 1.5,12" fill="'+col+'" stroke="#0e0e10" stroke-width="2.2"/><polygon points="12,6 18,12 12,18 6,12" fill="none" stroke="#0e0e10" stroke-width="1"/><circle cx="12" cy="12" r="1.7" fill="#0e0e10"/></svg>'});}
+function adIcon(col,s){return L.divIcon({className:"",iconSize:[s,s],iconAnchor:[s/2,s/2],html:'<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24"><path d="M3 8 L6 3 L18 3 L21 8 Z" fill="'+col+'" stroke="#0e0e10" stroke-width="2"/><rect x="4.5" y="8" width="15" height="12.5" fill="'+col+'" stroke="#0e0e10" stroke-width="2"/><line x1="3" y1="8" x2="21" y2="8" stroke="#0e0e10" stroke-width="1.4"/><rect x="9" y="12.5" width="6" height="8" fill="#0e0e10" opacity=".5"/></svg>'});}
+function makeMarker(f,ll){const p=f.properties,t=ptype(p),col=markColor(p),sc=infoScore(p);
+  if(t==="landmark")return L.marker(ll,{icon:vintageIcon(col,20+Math.min(10,sc*1.6)),zIndexOffset:1000});
+  if(t==="directory")return L.marker(ll,{icon:adIcon(col,18+Math.min(9,sc*1.4)),zIndexOffset:600});
+  return L.circleMarker(ll,{renderer,radius:4+Math.min(5,sc),color:"#0e0e10",weight:1.1,fillColor:col,fillOpacity:.92});}
+// clicking a dot: center it immediately, then open the fullscreen time-scrub lightbox (no popup)
+// hovering a dot: its context surfaces in the ambient dock — no click required
+function bindPop(f,lyr){
+  lyr.on("click",e=>{ L.DomEvent.stop(e); map.setView(e.latlng||lyr.getLatLng(),map.getZoom(),{animate:false}); openLB(f); });
+  lyr.on("mouseover",()=>dockShow(f));
+  lyr.on("mouseout",dockHide);
+}
+let FC=null, curLayer=null;
+const SELECTED=new Set();   // era multi-select (empty = all)
+function visibleP(p){ return SELECTED.size ? (p.moment && SELECTED.has(p.moment)) : true; }
+let SWEEP=true;   // photos hide in the parcels; the cursor reveals them
+function applySweepVis(){
+  if(!curLayer)return;
+  curLayer.eachLayer(l=>{
+    if(l.setStyle)l.setStyle(SWEEP?{opacity:0,fillOpacity:0}:{opacity:1,fillOpacity:.92});
+    else if(l.setOpacity)l.setOpacity(SWEEP?0:1);
+  });
+}
+function buildLayer(){ if(curLayer)map.removeLayer(curLayer); curLayer=L.geoJSON(FC,{renderer,filter:f=>visibleP(f.properties),pointToLayer:makeMarker,onEachFeature:bindPop}).addTo(map); applySweepVis(); }
+const loadData = window.PHOTO_GEOJSON ? Promise.resolve(window.PHOTO_GEOJSON) : fetch("photos.geojson").then(r=>{ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); });
+loadData.then(fc=>{ FC=fc; document.getElementById("count").textContent=fc.features.length+" PINS"; buildLayer();
+  requestAnimationFrame(()=>{ map.invalidateSize();
+    try{ map.fitBounds(curLayer.getBounds().pad(0.08)); }catch(e){} });
+  addLegend(); addLandmarks();
+  const mh=location.hash.match(/#ll=([\d.-]+),([\d.-]+)(?:,(\d+))?/);
+  if(mh) setTimeout(()=>map.setView([+mh[1],+mh[2]],+(mh[3]||18),{animate:false}),80);
+}).catch(e=>{ document.getElementById("count").textContent="LOAD ERROR"; console.error(e); });
+// ---- designated landmarks (SF Planning rzic-39gi + curated entries, one ◈ layer) ----
+// every landmark gets the same vintage lozenge; clicking opens its historical timeline.
+function addLandmarks(){ (window.LANDMARKS||[]).forEach(l=>{
+  if(!l.lat||!l.lng)return;
+  const m=L.marker([l.lat,l.lng],{icon:vintageIcon("#eaf1fb",18),zIndexOffset:1200,
+    title:l.name+(l.yearbuilt?" · "+l.yearbuilt:"")});
+  m.on("click",()=>{ location.href="landmarks.html#lm-"+l.landmarkno; });
+  m.addTo(map);
+});}
+// ---- overall description / legend (light pastel blue) — this is where era & neighborhood are described, once ----
+document.head.insertAdjacentHTML("beforeend","<style>.ovleg{background:#eaf1fb;border:2.5px solid #0e0e10;box-shadow:4px 4px 0 #0e0e10;padding:8px 10px;max-width:310px;font-family:var(--mono,monospace);font-size:10px;line-height:1.5;color:#0e0e10}.ovh{font-family:var(--disp,sans-serif);font-weight:900;text-transform:uppercase;font-size:11px;margin-bottom:5px}.ovrow{margin-bottom:5px}.ovb{font-family:var(--disp,sans-serif);font-weight:900;text-transform:uppercase;font-size:9px;border:2px solid #0e0e10;background:#fff;padding:2px 6px;cursor:pointer;margin-right:4px}.ovb.on{background:#0e0e10;color:#eaf1fb}.ovleghint{opacity:.7;margin:4px 0}.ovswrap{display:flex;flex-wrap:wrap;gap:3px 8px;max-height:140px;overflow:auto}.sw{display:inline-flex;align-items:center;gap:4px;font-size:9px;cursor:help}.sw i{width:12px;height:12px;border:1px solid #0e0e10;display:inline-block;flex:0 0 auto}</style>");
+function addLegend(){
+  const ctl=L.control({position:"bottomleft"});
+  ctl.onAdd=function(){ const d=L.DomUtil.create("div","ovleg"); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d); render(d); return d; };
+  ctl.addTo(map);
+  function rangeNums(m){ const ns=(m.range.match(/\d{4}/g)||[]).map(Number); return [ns[0]||0, /now/.test(m.range)?new Date().getFullYear():(ns[1]||ns[0]||0)]; }
+  function render(d){
+    const eras=MORDER.map(id=>({id,m:(window.MOMENTS||{})[id]})).filter(x=>x.m);
+    const eraLeg=eras.map(x=>'<span class="sw'+(SELECTED.size&&!SELECTED.has(x.id)?" off":"")+'" data-e="'+x.id+'" title="'+esc(x.m.blurb)+'"><i style="background:'+eraColor(x.id)+'"></i>'+esc(x.m.label)+'</span>').join("");
+    // filter status: the rough period currently shown
+    let fstat='<span style="opacity:.6">click swatches · multi-select</span>';
+    if(SELECTED.size){
+      const sel=eras.filter(x=>SELECTED.has(x.id)).map(x=>rangeNums(x.m));
+      const lo=Math.min(...sel.map(r=>r[0])), hi=Math.max(...sel.map(r=>r[1]));
+      const shown=FC?FC.features.filter(f=>visibleP(f.properties)).length:0;
+      const undated=FC?FC.features.filter(f=>!f.properties.moment).length:0;
+      fstat='<b>SHOWING '+lo+'–'+hi+'</b> · '+SELECTED.size+' era'+(SELECTED.size>1?"s":"")+' · '+shown+' pins'
+        +(undated?' <span style="opacity:.55">(+'+undated+' undated hidden)</span>':'')
+        +' <button class="ovb" data-e="__clear">Clear</button>';
+    }
+    d.innerHTML='<div class="ovh">What &amp; when</div>'
+      +'<div class="ovrow">◈ landmark (click → its timeline) · ▢ directory ad · ● photo <span style="opacity:.6">· size = how much we know · <span style="color:#2b7a4b;font-weight:900">✓</span> = on OSM</span></div>'
+      +'<div class="ovrow"><b>Color</b> <button class="ovb'+(COLOR_MODE==="era"?" on":"")+'" data-m="era">Era</button><button class="ovb'+(COLOR_MODE==="hood"?" on":"")+'" data-m="hood">Neighborhood</button>'
+      +' <b style="margin-left:8px">Filter</b> '+fstat+'</div>'
+      +'<div class="ovswrap">'+eraLeg+'</div>';
+    d.querySelectorAll(".ovb[data-m]").forEach(b=>b.onclick=()=>{ COLOR_MODE=b.getAttribute("data-m"); buildLayer(); render(d); });
+    const clr=d.querySelector('.ovb[data-e="__clear"]'); if(clr) clr.onclick=()=>{ SELECTED.clear(); buildLayer(); render(d); };
+    d.querySelectorAll(".sw[data-e]").forEach(s=>s.onclick=()=>{ const id=s.getAttribute("data-e"); SELECTED.has(id)?SELECTED.delete(id):SELECTED.add(id); buildLayer(); render(d); });
+  }
+}
+// ---- FULLSCREEN LIGHTBOX — one photograph, full bleed. --------------------------------
+// The tick-bar time scrub is gone by explicit decision: it was to be anchored on Mapillary
+// street imagery, and Mapillary's search API is load-shedding all queries (verified), so per
+// the stated rule the scrub is removed rather than faked. ⇆ Now (aerial + live businesses)
+// and ⓘ Context remain. Click the image, ✕, or Esc to exit.
+document.head.insertAdjacentHTML("beforeend","<style>"
+ +".sw{cursor:pointer}.sw.off{opacity:.22}.sw:hover i{outline:2px solid #0e0e10}"
+ +"#lb{position:fixed;inset:0;background:rgba(10,10,11,.96);z-index:9999;display:none;flex-direction:column;font-family:var(--mono,monospace);color:#f3f1e8}"
+ +"#lb.on{display:flex}"
+ +"#lb .lbtop{display:flex;gap:10px;align-items:baseline;padding:10px 14px;border-bottom:2px solid #f3f1e8}"
+ +"#lb .lbyr{font-family:var(--disp);font-weight:600;font-size:26px;line-height:1}"
+ +"#lb .lbcap{font-size:12px;opacity:.85;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"
+ +"#lb .lbbtn{font-family:var(--disp);font-weight:600;font-size:10px;text-transform:uppercase;border:2px solid #f3f1e8;background:transparent;color:#f3f1e8;padding:3px 8px;cursor:pointer}"
+ +"#lb .lbbtn.on{background:#f3f1e8;color:#0a0a0b}"
+ +"#lb .lbmain{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;cursor:zoom-out}"
+ +"#lb .lbmain img{width:100%;height:100%;object-fit:contain;filter:grayscale(1);opacity:0;transition:opacity .25s}"
+ +"#lb .lbctx{position:absolute;left:14px;bottom:12px;max-width:360px;max-height:52vh;overflow:auto;background:#f3f1e8;color:#0e0e10;border:2.5px solid #0e0e10;box-shadow:5px 5px 0 #000;padding:10px;font-size:11px;cursor:auto;display:none}"
+ +"#lb .lbctx.on{display:block}"
+ +"#cmpo{display:none;position:absolute;inset:0}#cmpo.on{display:block}"
+ +"#cmpimg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:grayscale(1);clip-path:inset(0 0 0 50%)}"
+ +"#cmpline{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#c9282d;box-shadow:0 0 0 1px #0a0a0b}"
+ +"#cmpslider{position:absolute;left:8%;right:8%;bottom:64px;width:84%;appearance:none;height:3px;background:#f3f1e8;outline:none;cursor:ew-resize}"
+ +"#cmpslider::-webkit-slider-thumb{appearance:none;width:26px;height:26px;background:#c9282d;border:3px solid #f3f1e8;border-radius:0;cursor:ew-resize}"
+ +"#cmpbiz{position:absolute;left:8%;right:8%;bottom:14px;background:#f3f1e8;color:#0e0e10;border:2.5px solid #0e0e10;box-shadow:4px 4px 0 #000;padding:7px 10px;font-family:var(--mono);font-size:10.5px;line-height:1.5}"
+ +"#cmpthen,#cmpnow{position:absolute;top:12px;font-family:var(--disp);font-weight:600;font-size:12px;padding:4px 9px;background:#0a0a0b;color:#f3f1e8;border:2px solid #f3f1e8}"
+ +"#cmpthen{left:12px}#cmpnow{right:12px;background:#c9282d;border-color:#0a0a0b;color:#fff}"
+ +"</style>");
+const LB=document.createElement("div"); LB.id="lb"; document.body.appendChild(LB);
+let LBctxOn=false;
+const yearOf=p=>{const m=/(1[89]\d\d|20\d\d)/.exec(p.date||"");return m?+m[0]:null;};
+const iiifURL=p=>"https://digitalsf.org/nanna/proxy/iiif/image/"+p.iiif+"/full/%5E1600,/0/default.jpg";
+const isWM=p=>p.src==="wikimedia";
+const wmBig=u=>u.replace(/\/(\d+)px-/,"/1600px-");
+const thumbSrc=p=>isWM(p)?p.img:("thumbs/"+p.recid+".jpg");
+const attrib=p=>isWM(p)?'<span style="opacity:.55;font-size:9px;margin-left:8px">'+esc((p.artist||"").trim())+(p.license?" · "+esc(p.license):"")+" · Wikimedia Commons</span>":"";
+function closeLB(){ LB.classList.remove("on"); LB.innerHTML=""; }
+function openLB(f){
+  const p=f.properties, lng=f.geometry.coordinates[0], lat=f.geometry.coordinates[1];
+  LBctxOn=false; LB.classList.add("on");
+  const imgsrc=isWM(p)?wmBig(p.img):(p.iiif?iiifURL(p):"thumbs/"+p.recid+".jpg");
+  const fb=isWM(p)
+    ? ' onerror="if(!this.dataset.f){this.dataset.f=1;this.src=\''+esc(p.img)+'\'}else{this.remove()}"'
+    : ' onerror="if(!this.dataset.f){this.dataset.f=1;this.src=\'thumbs/'+p.recid+'.jpg\'}else if(this.dataset.f==1){this.dataset.f=2;this.src=\'https://digitalsf.org/nanna/thumbnail/image/'+p.recid+'?version=v2\'}else{this.remove()}"';
+  LB.innerHTML='<div class="lbtop">'
+    +'<span class="lbyr">'+(yearOf(p)||"UNDATED")+'</span>'
+    +'<span class="lbcap">'+esc(p.caption)+attrib(p)+'</span>'
+    +'<button class="lbbtn" id="lbcmp">⇆ Now</button>'
+    +'<button class="lbbtn" id="lbctxb">ⓘ Context</button>'
+    +'<button class="lbbtn" id="lbx">✕ Close</button></div>'
+    +'<div class="lbmain"><img src="'+imgsrc+'"'+fb+' onload="this.style.opacity=1" alt="">'
+    +'<div id="cmpo"><img id="cmpimg" alt="now"><div id="cmpline"></div>'
+    +'<input type="range" id="cmpslider" min="2" max="98" value="50">'
+    +'<div id="cmpbiz"></div><div id="cmpthen">THEN · '+(yearOf(p)||"?")+'</div><div id="cmpnow">NOW</div></div>'
+    +'<div class="lbctx">'+contextHTML(p)+'</div>'
+    +'</div>';
+  LB.querySelector(".lbmain").onclick=e=>{ if(e.target.closest(".lbctx")||e.target.closest("#cmpslider")||e.target.closest("#cmpbiz"))return; closeLB(); };
+  LB.querySelector("#lbctxb").onclick=e=>{e.stopPropagation();LBctxOn=!LBctxOn;LB.querySelector(".lbctx").classList.toggle("on",LBctxOn);e.target.classList.toggle("on",LBctxOn);};
+  LB.querySelector("#lbx").onclick=e=>{e.stopPropagation();closeLB();};
+  const cmpb=LB.querySelector("#lbcmp");
+  cmpb.onclick=async e=>{
+    e.stopPropagation();
+    const o=LB.querySelector("#cmpo"), on=!o.classList.contains("on");
+    o.classList.toggle("on",on); cmpb.classList.toggle("on",on);
+    if(on&&!o.dataset.loaded){
+      o.dataset.loaded=1;
+      const now=await nowImageFor(lat,lng,p.bearing);
+      LB.querySelector("#cmpimg").src=now.src;
+      LB.querySelector("#cmpnow").textContent="NOW · "+(now.kind.indexOf("street")>=0?"street (Mapillary)":"aerial (Esri)");
+      bizFor(p,lat,lng).then(b=>{ LB.querySelector("#cmpbiz").innerHTML=bizStripHTML(b); });
+    }
+    const sl=LB.querySelector("#cmpslider");
+    const set=v=>{ LB.querySelector("#cmpimg").style.clipPath="inset(0 0 0 "+v+"%)";
+                   LB.querySelector("#cmpline").style.left=v+"%"; };
+    sl.oninput=ev=>{ev.stopPropagation();set(sl.value);};
+    sl.onclick=ev=>ev.stopPropagation();
+    set(sl.value);
+  };
+}
+document.addEventListener("keydown",e=>{ if(LB.classList.contains("on")&&e.key==="Escape")closeLB(); });
+
+// ================= AMBIENT CONTEXT DOCK — hover, no click =================
+const dock=document.getElementById("dock");
+let dockT=null;
+function dockShow(f){ dockShowMulti([f]); }
+function dockShowMulti(fs){ clearTimeout(dockT);
+  if(!fs.length){ dockHide(); return; }
+  const p0=fs[0].properties, m=(window.MOMENTS||{})[p0.moment];
+  // the nearest photo leads with its full story; every other photo under the light is listed
+  let html='<div class="lbl">'+(yearOf(p0)||"undated")+(m?" · "+esc(m.label):"")+(p0.hood?" · "+esc(p0.hood):"")
+    +(fs.length>1?' · '+fs.length+' under the light':'')+'</div>'
+    +'<div class="dkcap">'+esc(p0.caption)+'</div>'
+    +'<img src="'+esc(thumbSrc(p0))+'" style="opacity:0" onload="this.style.opacity=1" onerror="this.remove()">'
+    +contextHTML(p0);
+  if(fs.length>1){
+    html+='<div class="lbl" style="margin-top:6px;border-top:1.5px dotted var(--ink);padding-top:6px">also here</div>';
+    fs.slice(1).forEach(f=>{ const p=f.properties;
+      html+='<div style="display:flex;gap:6px;align-items:center;margin-top:4px">'
+        +'<img src="'+esc(thumbSrc(p))+'" style="width:44px;height:30px;object-fit:cover;border:1.5px solid var(--ink);filter:grayscale(1);opacity:0" onload="this.style.opacity=1" onerror="this.remove()">'
+        +'<div style="font-size:9.5px;line-height:1.3"><b>'+(yearOf(p)||"·")+'</b> '+esc((p.caption||"").slice(0,58))+'</div></div>';
+    });
+  }
+  dock.innerHTML=html+'<div class="lbl" style="margin-top:6px">click a card — fullscreen</div>';
+  dock.classList.add("on");
+}
+function dockHide(){ dockT=setTimeout(()=>dock.classList.remove("on"),240); }
+
+// ================= NOW businesses (pipeline-filtered, else live DataSF fallback) ===========
+const _bizCache={};
+async function bizFor(p,lat,lng){
+  if(p.current&&p.current.biz&&p.current.biz.length) return {biz:p.current.biz,live:false};
+  const k=lat.toFixed(5)+","+lng.toFixed(5);
+  if(_bizCache[k])return _bizCache[k];
+  let biz=[];
+  try{
+    const w=encodeURIComponent("within_circle(location,"+lat+","+lng+",10) AND location_end_date IS NULL");
+    const rows=await fetch("https://data.sfgov.org/resource/g8m3-pdis.json?$select=dba_name,dba_start_date&$where="+w+"&$order=dba_start_date+DESC&$limit=30").then(r=>r.json());
+    const seen=new Set();
+    rows.forEach(r=>{const n=(r.dba_name||"").trim(); if(!n||seen.has(n.toLowerCase()))return;
+      seen.add(n.toLowerCase()); biz.push({name:n,since:(r.dba_start_date||"").slice(0,4)});});
+    biz=biz.slice(0,6);
+  }catch(e){}
+  return _bizCache[k]={biz,live:true};
+}
+function bizStripHTML(b){
+  if(!b.biz.length)return '<b>▮ NOW</b> — no active registered businesses on this lot <span style="opacity:.55">· DataSF</span>';
+  return '<b>▮ NOW AT THIS LOT</b> — '+b.biz.map(x=>esc(x.name)+(x.since?" (since "+x.since+")":"")).join(" · ")
+    +' <span style="opacity:.55">· DataSF'+(b.live?" live ±10m":" · footprint-matched")
+    +((b.biz.some(x=>x.verified))?" · ✓ OSM":"")+'</span>';
+}
+
+// ================= NOW imagery (Mapillary street-level if token, else Esri aerial) =========
+async function nowImageFor(lat,lng,bearing){
+  if(window.MAPILLARY_TOKEN){
+    // Graph API bbox queries intermittently shed load ("reduce the amount of data") —
+    // retry once with a tighter box before falling back to aerial.
+    for(const d of [0.0012,0.0005]){
+    try{
+      const u="https://graph.mapillary.com/images?access_token="+encodeURIComponent(window.MAPILLARY_TOKEN)
+        +"&fields=thumb_1024_url,compass_angle,computed_geometry&bbox="+(lng-d)+","+(lat-d)+","+(lng+d)+","+(lat+d)+"&limit=20";
+      const r=await fetch(u).then(x=>x.json());
+      if(r.data&&r.data.length){
+        let best=r.data[0],bs=1e9;
+        r.data.forEach(im=>{ let s=0;
+          if(bearing!=null&&im.compass_angle!=null){ let dd=Math.abs(im.compass_angle-bearing)%360; if(dd>180)dd=360-dd; s=dd; }
+          if(s<bs){bs=s;best=im;} });
+        return {src:best.thumb_1024_url,kind:"street level — now (Mapillary)"};
+      }
+    }catch(e){}
+    }
+  }
+  return {src:esriNow(lat,lng),kind:"aerial — now (Esri)"};
+}
+
+// ================= BIRDS-EYE → STREET-LEVEL continuity ====================
+// zoom is the distance axis: city → block → lot → street. Past max tile zoom, the map hands
+// off to street-level imagery instead of stopping.
+const street=document.getElementById("street"), stphoto=document.getElementById("stphoto"),
+      stlabel=document.getElementById("stlabel");
+let stOn=false;
+async function streetCheck(){
+  const z=map.getZoom();
+  if(z>=19&&!stOn){
+    stOn=true; const c=map.getCenter();
+    const now=await nowImageFor(c.lat,c.lng,null);
+    stphoto.src=now.src; stlabel.textContent=now.kind+" · "+c.lat.toFixed(5)+", "+c.lng.toFixed(5);
+    street.classList.add("on");
+  } else if(z<19&&stOn){ stOn=false; street.classList.remove("on"); }
+}
+map.on("zoomend",streetCheck);
+document.getElementById("stback").onclick=()=>{ map.setZoom(17); };
+document.getElementById("stopensv").onclick=()=>{ const c=map.getCenter(); open(svURL(c.lat,c.lng,null),"_blank"); };
+street.addEventListener("wheel",e=>{ if(e.deltaY<0)return; e.preventDefault(); map.setZoom(17); },{passive:false});
+
+// ================= NEAR ME — the walking mode =============================
+// Two rings: NEAR (≤160m) — a photo surfaces only when your phone POINTS at it (±40°);
+// HERE (≤55m) — you are standing in it; photos surface from every direction.
+const R_HERE=55, R_NEAR=160, CONE=40;
+const nearbtn=document.getElementById("nearbtn"), nearhud=document.getElementById("nearhud"), nstat=document.getElementById("nstat");
+let NM={on:false,watch:null,lat:null,lng:null,acc:null,head:null,marker:null,ring:null,raf:null};
+const dist_m=(la1,lo1,la2,lo2)=>{const x=(lo2-lo1)*Math.cos((la1+la2)*Math.PI/360)*111320,y=(la2-la1)*110540;return Math.hypot(x,y);};
+const brg=(la1,lo1,la2,lo2)=>{const y=Math.sin((lo2-lo1)*Math.PI/180)*Math.cos(la2*Math.PI/180),
+  x=Math.cos(la1*Math.PI/180)*Math.sin(la2*Math.PI/180)-Math.sin(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.cos((lo2-lo1)*Math.PI/180);
+  return (Math.atan2(y,x)*180/Math.PI+360)%360;};
+const compass8=b=>["N","NE","E","SE","S","SW","W","NW"][Math.round(b/45)%8];
+function nmRender(){
+  NM.raf=null;
+  if(!NM.on||NM.lat==null)return;
+  // user marker + accuracy ring on the map
+  const ll=[NM.lat,NM.lng];
+  if(!NM.marker){ NM.marker=L.circleMarker(ll,{radius:7,color:"#0e0e10",weight:2.5,fillColor:"#d33",fillOpacity:1,zIndexOffset:2000}).addTo(map);
+    NM.ring=L.circle(ll,{radius:R_NEAR,color:"#d33",weight:1.2,dashArray:"4 5",fill:false}).addTo(map); }
+  NM.marker.setLatLng(ll); NM.ring.setLatLng(ll);
+  // candidates
+  const cands=[];
+  FC.features.forEach(f=>{ if(!visibleP(f.properties))return;
+    const [lng,lat]=f.geometry.coordinates, d=dist_m(NM.lat,NM.lng,lat,lng);
+    if(d>R_NEAR)return;
+    const b=brg(NM.lat,NM.lng,lat,lng);
+    let show=d<=R_HERE, why=d<=R_HERE?"HERE":"";
+    if(!show&&NM.head!=null){ let dd=Math.abs(b-NM.head)%360; if(dd>180)dd=360-dd; if(dd<=CONE){show=true;why=compass8(b)+" ahead";} }
+    if(!show&&NM.head==null){ show=true; why=compass8(b); }  // no compass (desktop): show all in ring
+    if(show)cands.push({f,d,b,why});
+  });
+  cands.sort((a,b)=>a.d-b.d);
+  const here=cands.filter(c=>c.d<=R_HERE).length;
+  nstat.textContent="◉ "+cands.length+" photo"+(cands.length===1?"":"s")+" within reach"
+    +(here?" · "+here+" right here":"")
+    +(NM.head!=null?" · facing "+compass8(NM.head):"")
+    +(NM.acc?" · ±"+Math.round(NM.acc)+"m":"");
+  [...nearhud.querySelectorAll(".ncard")].forEach(n=>n.remove());
+  cands.slice(0,20).forEach(c=>{
+    const p=c.f.properties, el=document.createElement("div");
+    el.className="ncard";
+    el.innerHTML='<div class="dirtag">'+(c.d<=R_HERE?"◉ here":"→ "+c.why)+' · '+Math.round(c.d)+'m</div>'
+      +'<img src="'+esc(thumbSrc(p))+'" onerror="this.style.display=\'none\'">'
+      +'<div class="nc1">'+(yearOf(p)||"")+' · '+esc(p.caption)+'</div>';
+    el.onclick=()=>openLB(c.f);
+    nearhud.appendChild(el);
+  });
+}
+function nmQueue(){ if(!NM.raf)NM.raf=requestAnimationFrame(nmRender); }
+function nmHeading(e){
+  let h=null;
+  if(e.webkitCompassHeading!=null)h=e.webkitCompassHeading;          // iOS: degrees from north
+  else if(e.absolute&&e.alpha!=null)h=(360-e.alpha)%360;             // spec: alpha CCW from north
+  if(h!=null){NM.head=h;nmQueue();}
+}
+async function nmStart(){
+  NM.on=true; nearbtn.classList.add("on"); nearhud.classList.add("on"); nstat.textContent="◉ locating…";
+  if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission){
+    try{ if(await DeviceOrientationEvent.requestPermission()==="granted")
+      addEventListener("deviceorientation",nmHeading,true); }catch(e){}
+  } else addEventListener("deviceorientationabsolute",nmHeading,true),
+         addEventListener("deviceorientation",nmHeading,true);
+  NM.watch=navigator.geolocation.watchPosition(pos=>{
+    const first=NM.lat==null;
+    NM.lat=pos.coords.latitude; NM.lng=pos.coords.longitude; NM.acc=pos.coords.accuracy;
+    if(first)map.setView([NM.lat,NM.lng],17);
+    nmQueue();
+  },err=>{ nstat.textContent="◉ location unavailable — "+err.message; },
+  {enableHighAccuracy:true,maximumAge:2000,timeout:15000});
+}
+function nmStop(){
+  NM.on=false; nearbtn.classList.remove("on"); nearhud.classList.remove("on");
+  if(NM.watch!=null)navigator.geolocation.clearWatch(NM.watch);
+  removeEventListener("deviceorientation",nmHeading,true);
+  removeEventListener("deviceorientationabsolute",nmHeading,true);
+  if(NM.marker){map.removeLayer(NM.marker);map.removeLayer(NM.ring);NM.marker=NM.ring=null;}
+  NM.lat=NM.lng=NM.head=null;
+}
+nearbtn.onclick=()=>NM.on?nmStop():nmStart();
+if(location.hash==="#near")addEventListener("load",()=>setTimeout(nmStart,400));
+
+// ================= SWEEP — the lamp over the map ==========================
+// The photos hide inside the geocoded parcels. Moving the cursor is the light:
+// photos within its pool surface as small cards; the nearest one's story fills the dock.
+const SWEEP_R=90, SWEEP_MAX=10;
+const rvGroup=L.layerGroup().addTo(map);
+const rvCards=new Map();   // recid -> marker
+let sweepPt=null, sweepRaf=null;
+function rvIcon(p){
+  return L.divIcon({className:"",iconSize:[64,58],iconAnchor:[32,29],
+    html:'<div class="rvcard"><img src="'+esc(thumbSrc(p))+'" style="opacity:0" onload="this.style.opacity=1" onerror="this.parentElement.parentElement.remove()"><div class="rvyr">'+(yearOf(p)||"·")+'</div></div>'});
+}
+function sweepRender(){
+  sweepRaf=null;
+  if(!SWEEP||!sweepPt||!FC){ return; }
+  const cands=[];
+  FC.features.forEach(f=>{
+    if(!visibleP(f.properties))return;
+    const [lng,lat]=f.geometry.coordinates;
+    const cp=map.latLngToContainerPoint([lat,lng]);
+    const d=sweepPt.distanceTo(cp);
+    if(d<=SWEEP_R)cands.push({f,d,lat,lng});
+  });
+  cands.sort((a,b)=>a.d-b.d);
+  const keep=cands.slice(0,SWEEP_MAX);
+  const keepIds=new Set(keep.map(c=>c.f.properties.recid));
+  // retire cards that left the light
+  [...rvCards.keys()].forEach(id=>{ if(!keepIds.has(id)){ rvGroup.removeLayer(rvCards.get(id)); rvCards.delete(id); } });
+  keep.forEach(c=>{
+    const id=c.f.properties.recid;
+    if(!rvCards.has(id)){
+      const m=L.marker([c.lat,c.lng],{icon:rvIcon(c.f.properties),zIndexOffset:900});
+      m.on("click",()=>{ map.setView([c.lat,c.lng],map.getZoom(),{animate:false}); openLB(c.f); });
+      rvGroup.addLayer(m); rvCards.set(id,m);
+    }
+  });
+  dockShowMulti(keep.map(c=>c.f));
+}
+map.on("mousemove",e=>{ sweepPt=e.containerPoint; if(!sweepRaf)sweepRaf=requestAnimationFrame(sweepRender); });
+map.getContainer().addEventListener("mouseleave",()=>{ sweepPt=null;
+  rvCards.forEach(m=>rvGroup.removeLayer(m)); rvCards.clear(); dockHide(); });
+const lampbtn=document.getElementById("lampbtn");
+lampbtn.onclick=()=>{ SWEEP=!SWEEP; lampbtn.classList.toggle("on",SWEEP);
+  applySweepVis();
+  if(!SWEEP){ rvCards.forEach(m=>rvGroup.removeLayer(m)); rvCards.clear(); } };
+</script>
+</body>
+</html>
