@@ -35,7 +35,8 @@ body{background:var(--paper);color:var(--ink);font-family:'Metana',monospace;fon
 /* the wordmark: the actual 0xA000 fonts (text, not drawings), rotating materials.
    the t simply tumbles 180° over its own crossbar — the flipped letter IS the f. */
 #word{position:relative;display:flex;align-items:baseline;color:var(--ink);
-  font-family:'A000-Monochrome';font-size:min(13vw,150px);line-height:1}
+  font-family:'A000-Monochrome';font-size:min(13vw,150px);line-height:1;
+  visibility:hidden}   /* hero.js reveals it once the 0xA000 fonts are actually loaded */
 #word span{display:inline-block;transition:color .5s}
 #tglyph{will-change:transform}
 #tagline{margin-top:24px;text-align:center}
@@ -177,7 +178,15 @@ ul.led a:hover b{background:var(--blue);color:var(--paper)}
     <a id="logo" class="mvpui" href="palimpsest.html"><span class="gh">palimpse</span><span class="sf">sf</span></a>
     <div id="whymod" class="mvpui">
       <div class="lbl">why this exists</div>
-      <div class="why">that the ground itself is the only continuous character in the whole story.</div>
+      <div class="why">There is a specific vertigo induced by anyone standing at a San Francisco intersection
+      who travels along the third axis of memory — the realization that the ground itself is the only continuous
+      character in the whole story… that the cove was filled, and the ships were buried, and the hotels burned,
+      and the parking lots (there were always, at some point, parking lots) got towers poured over them, and
+      through every one of these reversals the parcel of land just sat there, keeping its shape, holding its
+      officially registered number, accumulating occupants the way a page accumulates handwriting. This project
+      is an attempt to read through the written drafts: 4,619 geocoded photographs, each tied back to its archive
+      because the whole point is that nobody no longer needs to blindly take anyone&rsquo;s word for what stood
+      where. Peel through the layers of the city to find what once was.</div>
     </div>
     <div id="yearbar" class="mvpui">
       <div class="lbl">images from <b id="ylo">1848</b> — <b id="yhi">2026</b> · a parcel stays lit only while it holds a photograph in range</div>
@@ -213,6 +222,6 @@ ul.led a:hover b{background:var(--blue);color:var(--paper)}
 <script src="mvp-parcels.js?v=2"></script>
 <script src="mvp-index.js?v=2"></script>
 <script src="geotag/landmarks-data.js?v=1"></script>
-<script src="hero.js?v=36" defer></script>
+<script src="hero.js?v=37" defer></script>
 </body>
 </html>

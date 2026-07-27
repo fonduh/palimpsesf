@@ -637,20 +637,22 @@ const panel=document.getElementById('panel'), pnlring=document.getElementById('p
 const escH=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let SEL=null, PST=null;
 const PBAD=new Set();
+// wikimedia serves any width — the cards are 315px (×2 dpr): ask for 640px, not 960+
+const wmFit=u=>/upload\.wikimedia\.org\/.*\/thumb\//.test(u)?u.replace(/\/(\d{2,4})px-([^\/]+)$/,'/640px-$2'):u;
 function pnlEntries(p){
   let es;
   if(p.lm){
     es=(p.lm.timeline||[]).filter(e=>e.t==='photo')
       .map(e=>({y:e.y||0, cap:e.d||'',
         src:(e.src==='wikimedia'?'wikimedia commons':'sfpl digitalsf'),
-        u:(e.src==='wikimedia'&&e.img)?e.img:(e.recid?'geotag/thumbs/'+e.recid+'.jpg':null)}))
+        u:(e.src==='wikimedia'&&e.img)?wmFit(e.img):(e.recid?'geotag/thumbs/'+e.recid+'.jpg':null)}))
       .filter(e=>e.u);
     if(p.lm.photo)es.push({y:1e4,now:true,cap:p.lm.name+' — the city\u2019s current photograph',
       src:'sf planning',u:p.lm.photo.replace('/Large/','/Docs/')});
   }else{
     es=p.ph.map(e=>({y:e[0],cap:e[2]||'',
       src:e[3]?'wikimedia commons':'sfpl digitalsf',
-      u:e[3]||('geotag/thumbs/'+e[1]+'.jpg')}));   // wm entries hotlink their own thumb
+      u:e[3]?wmFit(e[3]):('geotag/thumbs/'+e[1]+'.jpg')}));   // wm entries hotlink their own thumb
   }
   es=es.filter(e=>!PBAD.has(e.u));
   es.sort((x,y)=>(x.y||9998)-(y.y||9998));         // chronological; undated after the dated, 'now' last
@@ -684,14 +686,25 @@ function buildRing(es){
   if(!es.length){ pnlring.innerHTML=''; PST=null; updRingNav(); return; }
   const n=es.length, R=n<3?230:Math.max(230,Math.round(158/Math.tan(Math.PI/n)));
   PST={es,focus:n-1,step:360/n,R};   // enter at the newest — scrolling down digs older
+  // cards are born WITHOUT src: only the wheel-window around the focus fetches (hydrateCards).
+  // A 54-photo parcel used to fire 54 requests at once and the front card queued behind
+  // 53 others it was hiding — now the visible few load first and the rest load as you turn.
   pnlring.innerHTML=es.map((e,i)=>
     '<div class="pnlcard" data-i="'+i+'">'
-    +'<img decoding="async" src="'+escH(e.u)+'" alt="" '
-    +'onload="this.classList.add(\'ld\')" onerror="window.__mvpDrop(this.getAttribute(\'src\'))">'
+    +'<img decoding="async" alt="" data-src="'+escH(e.u)+'" '
+    +'onload="this.classList.add(\'ld\')" onerror="window.__mvpDrop(this.dataset.src)">'
     +'<div class="pyr">'+(e.now?'now':(e.y||'·'))+'</div>'
     +'<div class="pcap">'+escH(e.cap||'')+'</div>'
     +'<div class="psrc">photograph: '+escH(e.src||'')+'</div></div>').join('');
   layoutRing(); updRingNav();
+}
+function hydrateCards(){
+  if(!PST)return;
+  [...pnlring.children].forEach(c=>{
+    const im=c.querySelector('img'); if(!im||im.src)return;
+    const d=Math.abs(+c.dataset.i-PST.focus);
+    if(d<=3){ im.fetchPriority=d===0?'high':'low'; im.src=im.dataset.src; }
+  });
 }
 function layoutRing(){
   if(!PST)return;
@@ -705,6 +718,7 @@ function layoutRing(){
     c.style.pointerEvents=o>0?'auto':'none';
   });
   pnlring.style.transform='translateZ('+(-PST.R)+'px) rotateX('+(-PST.focus*PST.step)+'deg)';
+  hydrateCards();
 }
 function rotateRing(to){
   if(!PST)return;
@@ -794,6 +808,17 @@ addEventListener('load',()=>{ lockWidths(); buildScene(); });
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(lockWidths,50));
 lockWidths();
 buildScene();
+// the wordmark stays hidden until the 0xA000 files are ACTUALLY loaded — otherwise the
+// first paint shows the fallback monospace in the logo (the "unapproved font" flash).
+// A 2.5s timeout means a slow font CDN can only delay the reveal, never hold it hostage.
+(function(){
+  let shown=false;
+  const show=()=>{ if(shown)return; shown=true; lockWidths(); word.style.visibility='visible'; };
+  try{
+    Promise.all(FONTS.map(f=>document.fonts.load("16px '"+f+"'"))).then(show,show);
+  }catch(e){ show(); }
+  setTimeout(show,2500);
+})();
 // the intro always plays: a reload that restores deep scroll would land past the flip,
 // lock the letters instantly, and the reader would never see the materials rotate
 if('scrollRestoration' in history)history.scrollRestoration='manual';
