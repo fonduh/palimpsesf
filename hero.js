@@ -170,8 +170,11 @@ function tearStart(){
   center.style.transition='opacity .8s';
   center.style.opacity=0;
   const axes=document.getElementById('axes'); if(axes)axes.style.display='none';
-  if(vhEl){ vhEl.style.transition='opacity .8s'; vhEl.style.opacity=0; }
-  setTimeout(()=>{ center.style.display='none'; if(vhEl){vhEl.remove();vhEl=null;} },900);
+  // the blue lines and their peel invitation stay readable while the first tears land,
+  // then take their time leaving
+  if(vhEl){ const v=vhEl; setTimeout(()=>{ v.style.transition='opacity 1.8s'; v.style.opacity=0; },2600); }
+  setTimeout(()=>{ center.style.display='none'; },900);
+  setTimeout(()=>{ if(vhEl){vhEl.remove();vhEl=null;} },4600);
   if(mapcap)mapcap.style.opacity=.8;             // the sources line, under the map
   document.querySelectorAll('.mvpui').forEach(el=>el.classList.add('on'));
 }
@@ -313,15 +316,17 @@ function refineNow(){
 function buildScene(){
   DPR=Math.min(devicePixelRatio||1,2);
   cv.width=innerWidth*DPR; cv.height=innerHeight*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
-  // the top block (logo + why-this-exists + year sliders) and the bottom row (legend +
-  // sources) get reserved whitespace; the map keeps the city's TRUE aspect inside the rest
-  const mx=innerWidth*.05;
-  const topH=clamp(innerHeight*.36,250,380), botH=76;
-  const availW=innerWidth-mx*2, availH=Math.max(120,innerHeight-topH-botH);
+  // why-this-exists lives in a LEFT COLUMN; the map centers in the remaining width and
+  // only reserves headroom for the year sliders — so it runs noticeably larger
+  const mx=innerWidth*.04;
+  const colW=clamp(innerWidth*.20,230,330), colGap=30;
+  const topH=clamp(innerHeight*.13,92,132), botH=76;
+  const availW=innerWidth-mx*2-colW-colGap, availH=Math.max(120,innerHeight-topH-botH);
   const ASPECT=1.083;   // (E−W)·cos(37.76°) / (N−S)
   let mw=availW, mh=availW/ASPECT;
   if(mh>availH){ mh=availH; mw=availH*ASPECT; }
-  mapBox={x:(innerWidth-mw)/2, y:topH+(availH-mh)/2, w:mw, h:mh};
+  mapBox={x:mx+colW+colGap+(availW-mw)/2, y:topH+(availH-mh)/2, w:mw, h:mh};
+  mapBox.colX=mx; mapBox.colW=colW;
   projectParcels();
   layoutUI();
   sizeReveal();
@@ -332,10 +337,10 @@ const whymod=document.getElementById('whymod'), yearbar=document.getElementById(
       logoEl=document.getElementById('logo'), zoomctl=document.getElementById('zoomctl');
 function layoutUI(){
   if(!whymod)return;
-  logoEl.style.left=(mapBox.x+mapBox.w/2)+'px'; logoEl.style.top='14px';
-  logoEl.style.transform='translateX(-50%)';     // centered directly above the why panel
-  whymod.style.left=mapBox.x+'px'; whymod.style.width=mapBox.w+'px'; whymod.style.top='58px';
-  whymod.style.maxHeight=Math.max(60,mapBox.y-52-58-10)+'px'; whymod.style.overflowY='auto';
+  logoEl.style.left=(mapBox.colX+mapBox.colW/2)+'px'; logoEl.style.top='16px';
+  logoEl.style.transform='translateX(-50%)';     // centered directly above the why column
+  whymod.style.left=mapBox.colX+'px'; whymod.style.width=mapBox.colW+'px'; whymod.style.top='74px';
+  whymod.style.maxHeight=Math.max(120,innerHeight-76-74-8)+'px'; whymod.style.overflowY='auto';
   yearbar.style.left=mapBox.x+'px'; yearbar.style.width=mapBox.w+'px';
   yearbar.style.top=(mapBox.y-52)+'px';
   zoomctl.style.left=(mapBox.x+mapBox.w-34)+'px'; zoomctl.style.top=(mapBox.y+10)+'px';
@@ -638,7 +643,9 @@ const escH=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 let SEL=null, PST=null;
 const PBAD=new Set();
 // wikimedia serves any width — the cards are 315px (×2 dpr): ask for 640px, not 960+
-const wmFit=u=>/upload\.wikimedia\.org\/.*\/thumb\//.test(u)?u.replace(/\/(\d{2,4})px-([^\/]+)$/,'/640px-$2'):u;
+const wmFit=u=>/upload\.wikimedia\.org\/.*\/thumb\//.test(u)
+  ?u.replace(/\/(\d{2,4})px-([^\/]+)$/,(m,w,f)=>(+w>640?'/640px-':'/'+w+'px-')+f)
+  :u;
 function pnlEntries(p){
   let es;
   if(p.lm){
@@ -698,6 +705,7 @@ function buildRing(es){
     +'<div class="psrc">photograph: '+escH(e.src||'')+'</div></div>').join('');
   layoutRing(); updRingNav();
 }
+let warmT=null;
 function hydrateCards(){
   if(!PST)return;
   [...pnlring.children].forEach(c=>{
@@ -705,6 +713,14 @@ function hydrateCards(){
     const d=Math.abs(+c.dataset.i-PST.focus);
     if(d<=3){ im.fetchPriority=d===0?'high':'low'; im.src=im.dataset.src; }
   });
+  // after the visible few have loaded (or 1.4s, whichever first), quietly warm the rest
+  clearTimeout(warmT);
+  warmT=setTimeout(()=>{
+    if(!PST)return;
+    [...pnlring.querySelectorAll('img')].forEach(im=>{
+      if(!im.src&&im.dataset.src){ im.fetchPriority='low'; im.src=im.dataset.src; }
+    });
+  },1400);
 }
 function layoutRing(){
   if(!PST)return;
@@ -737,7 +753,26 @@ function updRingNav(){
   pnlolder.textContent=prev?('▼ '+(prev.now?'now':(prev.y||'undated'))):'';
   pnlnewer.textContent=next?('▲ '+(next.now?'now':(next.y||'undated'))):'';
 }
-window.__mvpDrop=u=>{ PBAD.add(u); if(SEL)buildRing(pnlEntries(SEL)); };
+// one broken image must not thrash the whole ring: hide that card, keep everything
+// else loading, and re-space the ring once, after the dust settles
+let dropT=null;
+window.__mvpDrop=u=>{
+  if(PBAD.has(u))return;
+  PBAD.add(u);
+  [...pnlring.querySelectorAll('img')].forEach(im=>{
+    if(im.dataset.src===u)im.closest('.pnlcard').style.display='none';
+  });
+  clearTimeout(dropT);
+  dropT=setTimeout(()=>{
+    if(!SEL||!PST)return;
+    const keepY=PST.es[PST.focus]&&PST.es[PST.focus].y;
+    buildRing(pnlEntries(SEL));
+    if(PST&&keepY!=null){
+      const i=PST.es.findIndex(e=>e.y===keepY);
+      if(i>=0)rotateRing(i);
+    }
+  },600);
+};
 pnlolder.addEventListener('click',()=>rotateRing(PST?PST.focus-1:0));
 pnlnewer.addEventListener('click',()=>rotateRing(PST?PST.focus+1:0));
 document.getElementById('pnlclose').addEventListener('click',()=>panel.classList.remove('open'));

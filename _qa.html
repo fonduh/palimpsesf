@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<!-- capture harness for the figma export — loads a page in an iframe, scrolls it to a
+     target position and optionally clicks controls, so headless Chrome (with a virtual
+     time budget) can screenshot mid-scroll states the CLI can't reach on its own. -->
+<style>html,body{margin:0;height:100%;overflow:hidden}iframe{border:0;width:100vw;height:100vh}</style>
+</head><body><iframe id="f"></iframe>
+<script>
+const q=new URLSearchParams(location.search);
+const f=document.getElementById('f');
+f.src=q.get('src')||'/palimpsest.html';
+f.addEventListener('load',()=>{
+  const w=f.contentWindow;
+  const y=+(q.get('y')||0);
+  setTimeout(()=>{
+    // keep scrolling until it sticks — an early scrollTo clamps to 0 if the page
+    // hasn't laid out its full height yet, and every downstream state check then lies
+    w.scrollTo(0,y);
+    const sv=setInterval(()=>{ if(Math.abs(w.scrollY-y)<4)clearInterval(sv); else w.scrollTo(0,y); },150);
+    const clicks=(q.get('clicks')||'').split(',').filter(Boolean);
+    clicks.forEach((id,i)=>setTimeout(()=>{const el=w.document.getElementById(id);if(el)el.click();},1200+i*900));
+    // waitclicks=id[.class],id2 — STATE-driven clicking: each entry waits until the element
+    // exists (and carries the class, if given) before clicking, then moves to the next.
+    // Timing-based clicks race the page's own phase machine under virtual time; this doesn't.
+    const wc=(q.get('waitclicks')||'').split(',').filter(Boolean);
+    let wi=0;
+    (function nextWC(){
+      if(wi>=wc.length)return;
+      const [id,cls]=wc[wi].split('.');
+      const iv=setInterval(()=>{
+        const el=w.document.getElementById(id);
+        if(el&&(!cls||el.classList.contains(cls))){
+          clearInterval(iv);
+          setTimeout(()=>{ el.click(); wi++; setTimeout(nextWC,150); },300);
+        }
+      },150);
+    })();
+    if(q.get('probe')){ // dump observable page state onto a badge (for headless verification)
+      setTimeout(()=>{
+        const d=w.document.body.appendChild(w.document.createElement('div'));
+        d.style.cssText='position:fixed;left:8px;bottom:8px;background:#c00;color:#fff;font:13px monospace;padding:6px;z-index:999;white-space:pre';
+        const g=id=>!!w.document.getElementById(id);
+        const sfsEl=w.document.getElementById('sfs');
+        let px='n/a';
+        try{ const c=w.document.getElementById('city');
+          const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+          let n=0; for(let i=3;i<im.length;i+=4)if(im[i]>0)n++;
+          px=n+' painted px, canvas '+c.width+'x'+c.height;
+        }catch(err){ px='ERR '+err.message; }
+        d.textContent='vh:'+g('vh')+' explore:'+g('explore')+' sq:'+g('sqfield')
+          +'\nsfs:'+(sfsEl?sfsEl.className+' color='+sfsEl.style.color:'MISSING')
+          +'\nhint:'+(w.document.getElementById('hint')||{}).textContent
+          +'\nstamps:'+(w.__stamps||0)+' city: '+px;
+      },+q.get('probe'));
+    }
+    if(q.get('brush')){ // sweep pointer strokes across the page — but only once the peel
+      // invitation exists (#explore); earlier strokes are dropped by the page's guard
+      const wait=setInterval(()=>{
+        if(!w.document.getElementById('explore'))return;
+        clearInterval(wait);
+        let n=0;
+        const iv=setInterval(()=>{
+          const t=n/34;
+          const x=w.innerWidth*(0.18+0.6*((t*2.2)%1));
+          const y=w.innerHeight*(0.3+0.45*t);
+          w.dispatchEvent(new PointerEvent('pointermove',{clientX:x,clientY:y}));
+          if(++n>34)clearInterval(iv);
+          if(n>34&&q.get('hover')){       // park the cursor on a chosen spot afterward
+            const [fx,fy]=q.get('hover').split(',').map(Number);
+            setTimeout(()=>w.dispatchEvent(new PointerEvent('pointermove',
+              {clientX:w.innerWidth*fx,clientY:w.innerHeight*fy})),400);
+          }
+        },60);
+      },200);
+    }
+    if(q.get('openparcel')){ // state-driven: wait for the final map, click the parcel, spin
+      const b=q.get('openparcel');
+      const wait2=setInterval(()=>{
+        if(!w.document.querySelector('.mvpui.on'))return;
+        clearInterval(wait2);
+        setTimeout(()=>{
+          let ring=(w.MVP_PARCELS||{})[b]; if(!ring)return; if(Array.isArray(ring[0][0]))ring=ring[0];
+          let sx=0,sy=0; ring.forEach(c=>{sx+=c[0];sy+=c[1]});
+          const lng=sx/ring.length, lat=sy/ring.length;
+          const mc=w.document.getElementById('mapcap');
+          const bx=parseFloat(mc.style.left), bw=parseFloat(mc.style.width);
+          const yb=parseFloat(w.document.getElementById('yearbar').style.top)+52;
+          const by2=parseFloat(w.document.getElementById('legend').style.top)-9;
+          const W=-122.509,E=-122.375,S=37.709,N=37.807;
+          const px=bx+(lng-W)/(E-W)*bw, py=yb+(N-lat)/(N-S)*(by2-yb);
+          w.document.getElementById('pin').dispatchEvent(new w.MouseEvent('click',{clientX:px,clientY:py,bubbles:true}));
+          const spins=+(q.get('spin')||0);
+          for(let i=0;i<spins;i++)setTimeout(()=>{
+            const el=w.document.getElementById('pnlolder'); if(el)el.click();
+          },700+i*300);
+        },900);
+      },200);
+    }
+  },700);
+});
+</script></body></html>
