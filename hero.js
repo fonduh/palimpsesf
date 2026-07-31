@@ -258,7 +258,7 @@ addEventListener('wheel',e=>{
   e.preventDefault();
   zoomAt(e.clientX,e.clientY,Math.exp(-e.deltaY*.0016));
 },{passive:false});
-const panelW=()=>Math.min(480,innerWidth*.92);
+const panelW=()=>Math.min(560,innerWidth*.94);
 let dragV=null, dragEnded=0;
 addEventListener('pointerdown',e=>{
   if(PHASE!=='final'||!inMap(e.clientX,e.clientY))return;
@@ -268,7 +268,7 @@ addEventListener('pointerdown',e=>{
 addEventListener('pointermove',e=>{
   if(!dragV)return;
   const dx=e.clientX-dragV.x, dy=e.clientY-dragV.y;
-  if(Math.abs(dx)+Math.abs(dy)>4)dragV.moved=true;
+  if(Math.abs(dx)+Math.abs(dy)>9)dragV.moved=true;   // real pans only — click jitter stays a click
   if(dragV.moved){ VIEW.tx=dragV.tx+dx/mapBox.w; VIEW.ty=dragV.ty+dy/mapBox.h; clampView(); }
 },{passive:true});
 addEventListener('pointerup',()=>{
@@ -390,6 +390,7 @@ function syncYears(ev){
   let a=+rlo.value, b=+rhi.value;
   if(a>b){ if(ev&&ev.target===rlo)b=a; else a=b; rlo.value=a; rhi.value=b; }
   YLO=a; YHI=b; yloEl.textContent=a; yhiEl.textContent=b;
+  if(window.__stackRefilter)window.__stackRefilter();   // late-bound: syncYears runs at boot, the stack exists later
   const f=v=>(v-1848)/(2026-1848)*100;
   drfill.style.left=f(a)+'%'; drfill.style.width=Math.max(0,f(b)-f(a))+'%';
 }
@@ -487,25 +488,32 @@ function drawThreads(){
     const mx=(ax+ex)/2, my=Math.max(ay,ey)+Math.hypot(ex-ax,ey-ay)*.055;
     ctx.beginPath(); ctx.moveTo(ax,ay); ctx.quadraticCurveTo(mx,my,ex,ey); ctx.stroke();
     if(j===0){
-      // the tag sits NEXT TO the carousel, a small margin off the cards, stacked:
-      //   parcel 0349010A   (italic)
-      //   south of market
-      //   jeff adachi way
+      // the tag sits NEXT TO the carousel on a pastel plate — the text never has to
+      // fight the basemap:  parcel 0349010A (italic) / neighborhood / street
       const lines=[['parcel '+SEL.b,true]];
       if(SEL.hood)lines.push([SEL.hood.toLowerCase(),false]);
       const st=SEL.street||(SEL.lm&&SEL.lm.address)||'';
       if(st)lines.push([st.toLowerCase(),false]);
-      const LH=13, lx=ex-14;                       // right-aligned, 14px shy of the cards
-      let ly=ey-((lines.length-1)*LH)/2;
-      ctx.textAlign='right'; ctx.globalAlpha=.95;
+      const LH=14, PADX=10, PADY=8;
+      let w=0;
       lines.forEach(([txt,ital])=>{
         ctx.font=(ital?'italic ':'')+'9.5px Whois, monospace';
-        ctx.lineWidth=3; ctx.strokeStyle='#e9e6db';
-        ctx.strokeText(txt,lx,ly);
-        ctx.fillStyle=BLUE; ctx.fillText(txt,lx,ly);
+        w=Math.max(w,ctx.measureText(txt).width);
+      });
+      const bw=w+PADX*2, bh=lines.length*LH+PADY*2-4;
+      const bx2=ex-14-bw, by2=ey-bh/2;             // plate hugs the cards, tag inside it
+      ctx.globalAlpha=.93; ctx.fillStyle='#eaf1fb';
+      ctx.fillRect(bx2,by2,bw,bh);
+      ctx.globalAlpha=1; ctx.lineWidth=1; ctx.strokeStyle=BLUE;
+      ctx.strokeRect(bx2+.5,by2+.5,bw-1,bh-1);
+      ctx.textAlign='left';
+      let ly=by2+PADY+9;
+      lines.forEach(([txt,ital])=>{
+        ctx.font=(ital?'italic ':'')+'9.5px Whois, monospace';
+        ctx.fillStyle=BLUE; ctx.fillText(txt,bx2+PADX,ly);
         ly+=LH;
       });
-      ctx.strokeStyle=BLUE; ctx.textAlign='start';
+      ctx.textAlign='start';
     }
   });
   ctx.restore(); ctx.globalAlpha=1;
@@ -662,6 +670,10 @@ function pnlEntries(p){
       u:e[3]?wmFit(e[3]):('geotag/thumbs/'+e[1]+'.jpg')}));   // wm entries hotlink their own thumb
   }
   es=es.filter(e=>!PBAD.has(e.u));
+  // the year sliders govern the stack too: dated photos stay only inside [YLO,YHI];
+  // undated ones ride along (they keep the parcel lit at any range); the city's 'now'
+  // photograph only belongs when the range reaches the present
+  es=es.filter(e=>e.now ? YHI>=2026 : (!e.y || (e.y>=YLO&&e.y<=YHI)));
   es.sort((x,y)=>(x.y||9998)-(y.y||9998));         // chronological; undated after the dated, 'now' last
   return es;
 }
@@ -688,10 +700,22 @@ function openPanel(p){
   }
   buildRing(pnlEntries(p));
   panel.classList.add('open');
+  // if the lot would hide under the floating photographs, walk the view left until the
+  // parcel — and its tag — stand clear of the stack
+  const limit=innerWidth-panelW()-110;
+  if(sxOf(p.ucx)>limit){
+    if(VIEW.k<2.4)VIEW.k=2.4;
+    VIEW.tx=.34-p.ucx*VIEW.k;
+    VIEW.ty=.5-p.ucy*VIEW.k;
+    clampView(); refineSoon();
+  }
 }
 function buildRing(es){
-  if(!es.length){ pnlring.innerHTML=''; PST=null; updRingNav(); return; }
-  const n=es.length, R=n<3?230:Math.max(230,Math.round(158/Math.tan(Math.PI/n)));
+  if(!es.length){
+    pnlring.innerHTML='<div class="pnlnote">no photographs in this year range —<br>widen the sliders</div>';
+    PST=null; updRingNav(); return;
+  }
+  const n=es.length, R=n<3?250:Math.max(250,Math.round(188/Math.tan(Math.PI/n)));
   PST={es,focus:n-1,step:360/n,R};   // enter at the newest — scrolling down digs older
   // cards are born WITHOUT src: only the wheel-window around the focus fetches (hydrateCards).
   // A 54-photo parcel used to fire 54 requests at once and the front card queued behind
@@ -756,6 +780,7 @@ function updRingNav(){
 // one broken image must not thrash the whole ring: hide that card, keep everything
 // else loading, and re-space the ring once, after the dust settles
 let dropT=null;
+window.__stackRefilter=()=>{ if(SEL&&panel.classList.contains('open'))buildRing(pnlEntries(SEL)); };
 window.__mvpDrop=u=>{
   if(PBAD.has(u))return;
   PBAD.add(u);

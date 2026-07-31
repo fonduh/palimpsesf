@@ -107,7 +107,7 @@ footer{padding:0 20px 60px;max-width:1060px;margin:0 auto}
    riding a VERTICAL wheel (y is the time axis: newer up, older down), stitched back to
    their parcel by blue threads drawn on the canvas. The container is transparent and
    click-through; only the cards, the nav years, ✕ and the dossier take the pointer. */
-#panel{position:absolute;top:0;right:0;bottom:0;width:min(480px,92vw);z-index:40;
+#panel{position:absolute;top:0;right:0;bottom:0;width:min(560px,94vw);z-index:40;
   background:none;border:none;padding:0;pointer-events:none;overflow:visible;
   transform:translateX(103%);transition:transform .45s cubic-bezier(.2,.8,.25,1)}
 #panel.open{transform:none}
@@ -138,6 +138,9 @@ footer{padding:0 20px 60px;max-width:1060px;margin:0 auto}
   text-transform:uppercase;line-height:1.55;margin-top:4px;max-height:46px;overflow:hidden}
 .pnlcard.front .psrc{display:block;font-family:'Whois',monospace;font-size:8.5px;opacity:.55;margin-top:3px;
   letter-spacing:.1em;text-transform:uppercase}
+.pnlnote{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;
+  font-family:'Whois',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  line-height:1.8;color:var(--ink);opacity:.75;background:rgba(233,230,219,.9);padding:10px 14px}
 #pnldetail{position:absolute;left:calc(50% - 157px);right:16px;top:calc(50% + 30vh);pointer-events:auto}
 #pnldetail summary{font-family:'Metana',monospace;font-weight:600;font-size:11.5px;
   text-transform:uppercase;cursor:pointer;letter-spacing:.04em;display:inline-block;
@@ -223,6 +226,6 @@ ul.led a:hover b{background:var(--blue);color:var(--paper)}
 <script src="mvp-parcels.js?v=2"></script>
 <script src="mvp-index.js?v=2"></script>
 <script src="geotag/landmarks-data.js?v=1"></script>
-<script src="hero.js?v=38" defer></script>
+<script src="hero.js?v=39" defer></script>
 </body>
 </html>
