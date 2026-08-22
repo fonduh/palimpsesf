@@ -1,0 +1,737 @@
+location_names,first_trip_month,last_trip_month,lat,lon,still_active,region
+Downtown Berkeley BART,2017,2026-07,37.87,-122.268,True,East Bay
+Bancroft Way at Telegraph Ave,2017,2026-07,37.869,-122.259,True,East Bay
+Fulton St at Bancroft Way,2017,2026-07,37.868,-122.266,True,East Bay
+Addison St at Fourth St,2017,2026-07,37.866,-122.299,True,East Bay
+California St at University Ave,2017,2024-04,37.871,-122.28,False,East Bay
+Frank H Ogawa Plaza,2017,2026-07,37.805,-122.272,True,East Bay
+14th St at Mandela Pkwy,2017,2026-07,37.811,-122.291,True,East Bay
+19th Street BART Station; 19th Street BART,2017,2026-07,37.809,-122.268,True,East Bay
+Bay Pl at Vernon St,2017,2026-07,37.812,-122.261,True,East Bay
+Russell St at College Ave,2017,2026-07,37.858,-122.253,True,East Bay
+College Ave at Taft Ave,2017,2026-07,37.842,-122.252,True,East Bay
+24th St at Market St; Market St at 24th St,2017,2026-07,37.816,-122.278,True,East Bay
+Washington St at 8th St,2017,2026-07,37.801,-122.275,True,East Bay
+Lake Merritt BART Station; Lake Merritt BART,2017,2026-07,37.797,-122.265,True,East Bay
+Lakeshore Ave at Trestle Glen Rd,2017,2026-07,37.811,-122.243,True,East Bay
+West Oakland BART Station; West Oakland BART,2017,2026-07,37.805,-122.295,True,East Bay
+MLK Jr Way at 14th St,2017,2024-03,37.806,-122.276,False,East Bay
+2nd Ave at E 18th St,2017,2026-07,37.8,-122.254,True,East Bay
+El Embarcadero at Grand Ave,2017,2026-07,37.809,-122.25,True,East Bay
+College Ave at Harwood Ave,2017,2021-04,37.848,-122.252,False,East Bay
+Shattuck Ave at Hearst Ave,2017,2026-07,37.874,-122.268,True,East Bay
+Derby St at College Ave,2017,2026-07,37.862,-122.254,True,East Bay
+45th St at Manila,2017,2026-07,37.833,-122.256,True,East Bay
+Snow Park,2017,2026-07,37.808,-122.264,True,East Bay
+Telegraph Ave at 23rd St; 23rd St at Telegraph Ave,2017,2026-07,37.813,-122.269,True,East Bay
+University Ave at Oxford St,2017,2025-10,37.872,-122.266,False,East Bay
+Grand Ave at Perkins St,2017,2026-07,37.809,-122.256,True,East Bay
+21st Ave at International Blvd,2017,2019-12,37.785,-122.239,False,East Bay
+Lakeside Dr at 14th St,2017,2026-07,37.801,-122.263,True,East Bay
+Telegraph Ave at 19th St,2017,2026-07,37.809,-122.27,True,East Bay
+MacArthur BART Station,2017,2024-05,37.828,-122.266,False,East Bay
+Telegraph Ave at Ashby Ave,2017,2026-07,37.856,-122.26,True,East Bay
+Ashby BART Station; Ashby BART,2017,2026-07,37.852,-122.27,True,East Bay
+Telegraph Ave at Carleton St,2017,2026-07,37.862,-122.259,True,East Bay
+Mosswood Park,2017,2026-07,37.825,-122.26,True,East Bay
+Genoa St at 55th St,2017,2026-07,37.84,-122.272,True,East Bay
+Haste St at Telegraph Ave,2017,2026-07,37.866,-122.259,True,East Bay
+Telegraph Ave at Alcatraz Ave,2017,2026-07,37.85,-122.26,True,East Bay
+Oregon St at Adeline St,2017,2026-07,37.858,-122.268,True,East Bay
+Shattuck Ave at 55th Ave; Shattuck Ave at 55th St,2017,2026-07,37.84,-122.264,True,East Bay
+12th St at 4th Ave; 4th Ave at E 12th St (Temporary Location); 4th Ave at E 12th St,2017,2026-07,37.796,-122.256,True,East Bay
+59th St at Horton St,2017,2026-07,37.841,-122.291,True,East Bay
+Berkeley Civic Center,2017,2026-07,37.869,-122.271,True,East Bay
+65th St at Hollis St,2017,2026-07,37.847,-122.291,True,East Bay
+Union St at 10th St,2017,2024-08,37.807,-122.289,False,East Bay
+Vine St at Shattuck Ave,2017,2026-07,37.88,-122.27,True,East Bay
+47th St at San Pablo Ave,2017,2026-07,37.836,-122.281,True,East Bay
+45th St at MLK Jr Way,2017,2026-07,37.834,-122.267,True,East Bay
+Broadway at 40th St,2017,2026-07,37.828,-122.257,True,East Bay
+Webster St at 19th St,2017,2026-07,37.807,-122.267,True,East Bay
+14th St at Filbert St,2017,2026-07,37.809,-122.283,True,East Bay
+Franklin St at 9th St,2017,2026-07,37.801,-122.272,True,East Bay
+Stanford Ave at Hollis St,2017,2026-07,37.838,-122.289,True,East Bay
+Broadway at 30th St,2017,2026-07,37.819,-122.262,True,East Bay
+Shattuck Ave at Telegraph Ave,2017,2026-07,37.833,-122.263,True,East Bay
+10th St at Fallon St,2017,2026-07,37.798,-122.263,True,East Bay
+Grand Ave at Webster St,2017,2026-07,37.811,-122.265,True,East Bay
+MLK Jr Way at University Ave,2017,2026-07,37.872,-122.273,True,East Bay
+Fruitvale BART Station; Fruitvale BART,2017,2026-07,37.775,-122.224,True,East Bay
+49th St at Telegraph Ave,2017,2020-11,37.836,-122.262,False,East Bay
+Horton St at 40th St,2017,2026-07,37.83,-122.288,True,East Bay
+Grand Ave at Santa Clara Ave,2017,2026-07,37.813,-122.247,True,East Bay
+Adeline St at 40th St,2017,2026-07,37.831,-122.278,True,East Bay
+55th St at Telegraph Ave,2017,2026-07,37.84,-122.262,True,East Bay
+Broadway at Coronado Ave,2017,2026-07,37.836,-122.252,True,East Bay
+Ninth St at Heinz Ave,2017,2026-07,37.853,-122.289,True,East Bay
+Channing Way at San Pablo Ave,2017,2026-07,37.863,-122.29,True,East Bay
+Parker St at Fulton St,2017,2026-07,37.862,-122.265,True,East Bay
+Dover St at 57th St,2017,2026-07,37.843,-122.268,True,East Bay
+Bancroft Way at College Ave,2017,2026-07,37.869,-122.254,True,East Bay
+San Antonio Park,2017,2026-07,37.79,-122.242,True,East Bay
+Market St at 40th St,2017,2026-07,37.831,-122.274,True,East Bay
+12th St at 6th Ave; 6th Ave at E 12th St (Temporary Location); 6th Ave at E 12th St,2017,2026-07,37.794,-122.254,True,East Bay
+North Berkeley BART Station; North Berkeley BART,2017,2026-07,37.874,-122.283,True,East Bay
+Telegraph Ave at 58th St,2017,2026-07,37.844,-122.261,True,East Bay
+Isabella St at San Pablo Ave,2017,2026-07,37.815,-122.275,True,East Bay
+San Pablo Ave at MLK Jr Way,2017,2026-07,37.811,-122.273,True,East Bay
+37th St at West St,2017,2026-07,37.827,-122.272,True,East Bay
+West St at 40th St,2017,2026-07,37.83,-122.271,True,East Bay
+Shattuck Ave at 51st St,2017,2021-02,37.837,-122.264,False,East Bay
+32nd St at Adeline St,2017,2026-07,37.824,-122.281,True,East Bay
+Emeryville Town Hall,2017,2026-07,37.831,-122.286,True,East Bay
+Market St at Brockhurst St,2017,2022-04,37.823,-122.276,False,East Bay
+Harmon St at Adeline St,2017,2026-07,37.85,-122.271,True,East Bay
+Shafter Ave at Cavour St,2017,2018-06,37.838,-122.257,False,East Bay
+Foothill Blvd at Fruitvale Ave,2017,2026-07,37.784,-122.223,True,East Bay
+San Pablo Ave at 27th St; 27th St at San Pablo Ave,2017,2026-07,37.818,-122.276,True,East Bay
+10th Ave at E 15th St,2017,2026-07,37.793,-122.249,True,East Bay
+College Ave at Bryant Ave,2017,2026-07,37.838,-122.251,True,East Bay
+26th Ave at International Blvd,2017,2026-07,37.781,-122.233,True,East Bay
+Jackson St at 11th St,2017,2026-07,37.8,-122.266,True,East Bay
+Telegraph Ave at 27th St,2017,2026-07,37.816,-122.268,True,East Bay
+34th St at Telegraph Ave,2017,2026-07,37.823,-122.266,True,East Bay
+Bushrod Park,2017,2026-07,37.847,-122.265,True,East Bay
+DeFremery Park,2017,2026-07,37.812,-122.285,True,East Bay
+13th St at Franklin St,2017,2024-02,37.803,-122.271,False,East Bay
+53rd St at Hollis St,2017,2026-07,37.836,-122.287,True,East Bay
+MacArthur Blvd at Telegraph Ave,2017,2026-07,37.826,-122.265,True,East Bay
+Doyle St at 59th St,2017,2026-07,37.842,-122.288,True,East Bay
+Fruitvale Ave at International Blvd,2017,2020-10,37.778,-122.226,False,East Bay
+Ninth St at Parker St,2017,2026-07,37.859,-122.291,True,East Bay
+Foothill Blvd at Harrington Ave,2017,2026-07,37.78,-122.218,True,East Bay
+Marston Campbell Park,2017,2026-07,37.81,-122.28,True,East Bay
+Ellsworth St at Russell St; Russell St at Ellsworth St,2017,2026-07,37.857,-122.262,True,East Bay
+Market St at 8th St,2017,2023-01,37.804,-122.282,False,East Bay
+Foothill Blvd at 42nd Ave,2017,2020-01,37.776,-122.213,False,East Bay
+Webster St at 17th St,2017,2017,37.806,-122.267,False,East Bay
+Franklin St at 14th St,2017,2017,37.804,-122.27,False,East Bay
+Jackson St at 14th St,2017,2017,37.802,-122.265,False,East Bay
+Rockridge BART Station; Rockridge BART,2018-01,2026-07,37.844,-122.252,True,East Bay
+23rd Ave at Foothill Blvd,2018-01,2026-07,37.785,-122.234,True,East Bay
+27th St at MLK Jr Way; MLK Jr Way at 27th St,2018-01,2026-07,37.817,-122.272,True,East Bay
+College Ave at Alcatraz Ave,2018-02,2026-07,37.851,-122.253,True,East Bay
+Woolsey St at Sacramento St; Woolsey St at Sacramento St1,2018-02,2026-07,37.851,-122.278,True,East Bay
+Hearst Ave at Euclid Ave,2018-02,2023-10,37.875,-122.261,False,East Bay
+Channing Way at Shattuck Ave,2018-03,2026-07,37.866,-122.267,True,East Bay
+Webster St at 2nd St,2018-03,2026-07,37.795,-122.274,True,East Bay
+Fulton St at Ashby Ave,2018-03,2026-07,37.856,-122.264,True,East Bay
+Milvia St at Derby St,2018-03,2026-07,37.86,-122.269,True,East Bay
+Market St at 45th St,2018-03,2026-07,37.834,-122.273,True,East Bay
+Jack London Square,2018-03,2026-07,37.796,-122.279,True,East Bay
+Emeryville Public Market,2018-03,2026-07,37.841,-122.294,True,East Bay
+Virginia St at Shattuck Ave,2018-03,2026-07,37.877,-122.27,True,East Bay
+Alcatraz Ave at Shattuck Ave,2018-03,2026-07,37.85,-122.266,True,East Bay
+San Pablo Park,2018-04,2026-07,37.856,-122.283,True,East Bay
+Haste St at College Ave,2018-06,2026-07,37.866,-122.254,True,East Bay
+Fifth St at Delaware St,2018-06,2026-07,37.87,-122.3,True,East Bay
+West St at University Ave,2018-07,2026-07,37.87,-122.287,True,East Bay
+10th St at University Ave,2018-07,2026-07,37.869,-122.293,True,East Bay
+Miles Ave at Cavour St,2018-09,2026-07,37.839,-122.259,True,East Bay
+Madison St at 17th St,2018-09,2026-07,37.804,-122.262,True,East Bay
+Farnam St at Fruitvale Ave; Farnham St at Fruitvale Ave,2018-11,2026-07,37.778,-122.225,True,East Bay
+2100 Powell St,2019-04,2026-07,37.84,-122.299,True,East Bay
+MTL-ECO5-01,2019-06,2020-02,45.51,-73.57,False,East Bay
+21st St at 5th Ave,2020-01,2026-07,37.8,-122.247,True,East Bay
+Bond St at High St,2020-02,2026-07,37.774,-122.212,True,East Bay
+Telegraph Ave at 49th St,2020-07,2026-07,37.836,-122.263,True,East Bay
+13th St at Webster St,2020-12,2026-07,37.803,-122.269,True,East Bay
+52nd St at MLK Jr Way,2021-02,2026-07,37.837,-122.268,True,East Bay
+62nd St at Claremont Ave,2021-06,2026-07,37.849,-122.253,True,East Bay
+West St at Brockhurst St; West at Brockhurst,2022-04,2026-07,37.823,-122.273,True,East Bay
+40th St at Piedmont Ave,2022-04,2026-07,37.826,-122.253,True,East Bay
+Brockhurst St at San Pablo Ave,2022-06,2026-07,37.824,-122.277,True,East Bay
+10th St at Chestnut St,2023-02,2026-07,37.81,-122.29,True,East Bay
+Lab - NYC - M,2023-07,2026-01,40.754,-73.996,False,East Bay
+Euclid Ave at Hearst Ave,2023-10,2026-07,37.875,-122.26,True,East Bay
+Franklin St at 13th St,2024-02,2026-07,37.803,-122.27,True,East Bay
+MLK Jr Way 27th St,2024-02,2024-05,37.817,-122.271,False,East Bay
+Jefferson St at 14th St,2024-03,2026-07,37.805,-122.275,True,East Bay
+Addison St at California St,2024-04,2026-07,37.87,-122.279,True,East Bay
+MacArthur BART,2024-05,2026-07,37.829,-122.266,True,East Bay
+Raimondi Park,2024-06,2026-07,37.815,-122.293,True,East Bay
+Bay Street Plaza,2024-07,2026-07,37.835,-122.292,True,East Bay
+Ninth St at University Ave,2024-10,2025-02,37.868,-122.294,False,East Bay
+Mandela Parkway at W Grand Ave,2025-01,2026-07,37.816,-122.289,True,East Bay
+Brooklyn Basin,2025-04,2026-07,37.787,-122.256,True,East Bay
+Piedmont Ave at MacArthur Blvd,2025-06,2026-07,37.823,-122.257,True,East Bay
+Willow Park,2025-06,2026-07,37.812,-122.296,True,East Bay
+26th St at Broadway,2025-06,2026-07,37.815,-122.264,True,East Bay
+Second St at Oak St,2025-06,2026-07,37.793,-122.268,True,East Bay
+65th St at San Pablo Ave,2025-08,2026-07,37.848,-122.285,True,East Bay
+Brooklyn Ave at Lakeshore Ave,2025-08,2026-07,37.805,-122.25,True,East Bay
+Lowell St at Stanford Ave,2025-08,2026-07,37.843,-122.277,True,East Bay
+11th Ave at 19th St,2025-08,2026-07,37.795,-122.244,True,East Bay
+Emeryville Depot (Pillar),2025-09,2025-09,37.83,-122.289,False,East Bay
+Webster St at 40th St,2025-10,2026-07,37.829,-122.261,True,East Bay
+Fruitvale Ave at MacArthur Blvd,2025-10,2026-07,37.801,-122.216,True,East Bay
+Vallejo St at 66th St,2025-10,2026-07,37.848,-122.289,True,East Bay
+Lakeshore Ave,2025-10,2026-07,37.799,-122.259,True,East Bay
+Huchiun Park,2025-10,2026-07,37.832,-122.29,True,East Bay
+E 21st St at 23rd Ave,2025-10,2026-07,37.789,-122.232,True,East Bay
+Powell St at Admiral Dr,2025-11,2025-12,37.837,-122.307,False,East Bay
+MacArthur Blvd at Hopkins Pl,2025-12,2026-07,37.799,-122.208,True,East Bay
+Powell St at Commodore Dr,2025-12,2026-07,37.837,-122.305,True,East Bay
+E 18th St at 4th Ave,2025-12,2026-07,37.799,-122.251,True,East Bay
+Lynde St at Fruitvale Ave,2026-01,2026-07,37.791,-122.22,True,East Bay
+Magee Ave at MacArthur Blvd,2026-01,2026-07,37.793,-122.2,True,East Bay
+16th Ave at E 21st St,2026-02,2026-07,37.793,-122.24,True,East Bay
+Brookdale Ave at 35th Ave,2026-02,2026-07,37.788,-122.21,True,East Bay
+Curtis St at Gilman St,2026-04,2026-07,37.881,-122.29,True,East Bay
+Strawberry Creek Park,2026-04,2026-07,37.865,-122.286,True,East Bay
+James Kenney Park,2026-04,2026-07,37.873,-122.297,True,East Bay
+Tenth St at Gilman St,2026-04,2026-07,37.881,-122.297,True,East Bay
+Tom Bates Sports Complex,2026-04,2026-07,37.878,-122.309,True,East Bay
+Josephine St at Sonoma Ave,2026-05,2026-07,37.885,-122.276,True,East Bay
+Grove Park,2026-05,2026-07,37.856,-122.273,True,East Bay
+Hearst Ave at Gayley Rd,2026-05,2026-07,37.875,-122.257,True,East Bay
+Clark Kerr Campus,2026-05,2026-07,37.865,-122.25,True,East Bay
+Berkeley Way at Walnut St,2026-06,2026-07,37.873,-122.267,True,East Bay
+California St at Dwight Way,2026-07,2026-07,37.862,-122.279,True,East Bay
+Berkeley Marina,2026-07,2026-07,37.865,-122.312,True,East Bay
+Laguna St at Hayes St,2017,2026-07,37.776,-122.426,True,SF
+San Francisco Public Library (Grove St at Hyde St); San Francisco Public Library,2017,2026-07,37.779,-122.416,True,SF
+Yerba Buena Center for the Arts (Howard St at 3rd St); Yerba Buena Center for the Arts,2017,2026-07,37.785,-122.401,True,SF
+Dolores St at 15th St,2017,2026-07,37.766,-122.427,True,SF
+8th St at Ringold St,2017,2026-07,37.775,-122.409,True,SF
+Powell St BART Station (Market St at 5th St); Powell St BART South,2017,2026-07,37.784,-122.408,True,SF
+San Francisco Caltrain (Townsend St at 4th St); San Francisco Caltrain West; San Francsico Caltrain Station - Townsend St; San Francisco Caltrain Station - Townsend St,2017,2026-07,37.777,-122.395,True,SF
+Mechanics Monument Plaza (Market St at Bush St); VIRTUAL STATION - Bush St Racks; Mechanics Monument Plaza Overflow; Mechanics Monument Plaza Virtual Station,2017,2026-07,37.791,-122.399,True,SF
+Howard St at Beale St,2017,2026-07,37.79,-122.395,True,SF
+San Francisco Caltrain Station 2  (Townsend St at 4th St),2017,2019-09,37.777,-122.396,False,SF
+Spear St at Folsom St,2017,2026-07,37.79,-122.39,True,SF
+3rd St at Townsend St,2017,2024-03,37.779,-122.393,False,SF
+The Embarcadero at Steuart St,2017,2026-07,37.791,-122.391,True,SF
+Clay St at Battery St,2017,2026-07,37.795,-122.4,True,SF
+Beale St at Harrison St,2017,2026-07,37.788,-122.392,True,SF
+Folsom St at 9th St,2017,2026-07,37.774,-122.412,True,SF
+San Francisco Ferry Building (Harry Bridges Plaza); San Francisco Ferry Building,2017,2026-07,37.795,-122.394,True,SF
+Cyril Magnin St at Ellis St,2017,2026-07,37.786,-122.409,True,SF
+Folsom St at 19th St,2017,2026-07,37.761,-122.415,True,SF
+The Embarcadero at Sansome St,2017,2026-07,37.805,-122.403,True,SF
+Garfield Square (25th St at Harrison St); Garfield Square,2017,2026-07,37.751,-122.412,True,SF
+Folsom St at 15th St,2017,2026-07,37.767,-122.415,True,SF
+Broadway at Kearny; Broadway at Kearny St,2017,2026-07,37.798,-122.406,True,SF
+S Park St at 3rd St; South Park St at 3rd St,2017,2026-07,37.781,-122.395,True,SF
+Davis St at Jackson St,2017,2026-07,37.797,-122.398,True,SF
+Market St at Dolores St,2017,2026-07,37.769,-122.427,True,SF
+Valencia St at 16th St,2017,2025-04,37.765,-122.422,False,SF
+Victoria Manalo Draves Park,2017,2026-07,37.778,-122.406,True,SF
+Post St at Kearny St,2017,2026-07,37.789,-122.403,True,SF
+Steuart St at Market St,2017,2020-01,37.794,-122.394,False,SF
+San Francisco City Hall (Polk St at Grove St); San Francisco City Hall,2017,2026-07,37.779,-122.418,True,SF
+The Embarcadero at Vallejo St,2017,2026-07,37.8,-122.399,True,SF
+Church St at Duboce Ave,2017,2026-07,37.77,-122.429,True,SF
+Mission Dolores Park,2017,2026-07,37.761,-122.426,True,SF
+19th St at Florida St,2017,2026-07,37.76,-122.411,True,SF
+Valencia St at 24th St,2017,2026-07,37.752,-122.421,True,SF
+Montgomery St BART Station (Market St at 2nd St); Montgomery St BART,2017,2026-07,37.79,-122.401,True,SF
+5th St at Howard St,2017,2026-07,37.782,-122.405,True,SF
+Valencia St at 22nd St; 22nd St at Valencia St,2017,2026-07,37.755,-122.421,True,SF
+Market St at 10th St,2017,2026-07,37.777,-122.417,True,SF
+Koshland Park; Koshland Park (Page St at Buchanan St),2017,2026-07,37.773,-122.427,True,SF
+Valencia St at 21st St; 21st St at Valencia St,2017,2026-07,37.757,-122.421,True,SF
+30th St at San Jose Ave,2017,2026-07,37.742,-122.423,True,SF
+24th St at Chattanooga St,2017,2026-07,37.752,-122.427,True,SF
+Jersey St at Castro St; Castro St at Jersey St,2017,2026-07,37.751,-122.434,True,SF
+20th St at Bryant St,2017,2026-07,37.759,-122.41,True,SF
+Mission Playground,2017,2026-07,37.759,-122.421,True,SF
+Valencia St at Cesar Chavez St,2017,2024-02,37.748,-122.42,False,SF
+McCoppin St at Valencia St,2017,2026-07,37.772,-122.422,True,SF
+Powell St BART Station (Market St at 4th St); Powell St BART North,2017,2026-07,37.786,-122.405,True,SF
+Washington St at Kearny St,2017,2026-07,37.795,-122.405,True,SF
+Esprit Park; Esprit Park (19th St at Minnesota St),2017,2026-07,37.762,-122.391,True,SF
+Berry St at 4th St; SF STATION IN A BOX 1,2017,2026-07,37.776,-122.393,True,SF
+18th St at Noe St,2017,2026-07,37.761,-122.433,True,SF
+7th St at Brannan St; Brannan St at 7th St,2017,2026-07,37.773,-122.404,True,SF
+Golden Gate Ave at Polk St; Polk St at Golden Gate Ave,2017,2026-07,37.781,-122.419,True,SF
+The Embarcadero at Bryant St,2017,2026-07,37.787,-122.388,True,SF
+Grove St at Divisadero; Grove St at Divisadero St,2017,2026-07,37.776,-122.438,True,SF
+McAllister St at Baker St,2017,2026-07,37.777,-122.442,True,SF
+19th St at Mission St,2017,2026-07,37.76,-122.419,True,SF
+Golden Gate Ave at Hyde St,2017,2020-05,37.782,-122.415,False,SF
+2nd St at S Park St; South Park St at 2nd St,2017,2026-07,37.782,-122.393,True,SF
+2nd St at Folsom St; Folsom St at 2nd St,2017,2026-07,37.785,-122.397,True,SF
+11th St at Bryant St,2017,2026-07,37.77,-122.412,True,SF
+29th St at Tiffany Ave,2017,2026-07,37.744,-122.421,True,SF
+14th St at Mission St,2017,2026-07,37.768,-122.42,True,SF
+Embarcadero BART Station (Beale St at Market St); Embarcadero BART,2017,2025-09,37.792,-122.397,False,SF
+11th St at Natoma St,2017,2026-07,37.774,-122.416,True,SF
+Howard St at 8th St,2017,2026-07,37.777,-122.411,True,SF
+Father Alfred E Boeddeker Park,2017,2026-07,37.784,-122.412,True,SF
+4th St at Mission Bay Blvd S,2017,2026-07,37.77,-122.391,True,SF
+Harrison St at 20th St,2017,2026-07,37.759,-122.413,True,SF
+Eureka Valley Recreation Center,2017,2026-07,37.759,-122.437,True,SF
+Jackson Playground,2017,2026-07,37.765,-122.399,True,SF
+O'Farrell St at Divisadero St,2017,2026-07,37.782,-122.439,True,SF
+4th St at Harrison St,2017,2026-07,37.781,-122.4,True,SF
+Webster St at O'Farrell St,2017,2026-07,37.784,-122.431,True,SF
+Union Square (Powell St at Post St); Union Square,2017,2026-07,37.788,-122.409,True,SF
+Central Ave at Fell St,2017,2021-12,37.773,-122.444,False,SF
+Commercial St at Montgomery St,2017,2026-07,37.794,-122.403,True,SF
+Page St at Scott St,2017,2026-07,37.772,-122.436,True,SF
+Harrison St at 17th St,2017,2026-07,37.764,-122.413,True,SF
+29th St at Church St,2017,2026-07,37.744,-122.427,True,SF
+16th St Mission BART; 16th St Mission BART Station 2; 16th St Mission BART South; 16th St Mission BART North,2017,2026-07,37.765,-122.42,True,SF
+Franklin Square,2017,2026-07,37.765,-122.41,True,SF
+Sanchez St at 15th St,2017,2026-07,37.766,-122.431,True,SF
+Townsend St at 7th St,2017,2026-07,37.771,-122.403,True,SF
+Raymond Kimbell Playground,2017,2026-07,37.784,-122.435,True,SF
+Civic Center/UN Plaza BART Station (Market St at McAllister St); Civic Center BART,2017,2026-07,37.781,-122.412,True,SF
+1st St at Folsom St,2017,2025-11,37.787,-122.394,False,SF
+S Van Ness Ave at Market St,2017,2026-07,37.775,-122.419,True,SF
+Scott St at Golden Gate Ave,2017,2026-07,37.779,-122.437,True,SF
+Broderick St at Oak St,2017,2026-07,37.773,-122.439,True,SF
+Market St at Franklin St,2017,2026-07,37.774,-122.421,True,SF
+Division St at Potrero Ave,2017,2026-07,37.769,-122.408,True,SF
+Rhode Island St at 17th St,2017,2026-07,37.764,-122.403,True,SF
+Mississippi St at 17th St,2017,2026-07,37.765,-122.395,True,SF
+Folsom St at 3rd St,2017,2024-07,37.784,-122.399,False,SF
+22nd St Caltrain Station,2017,2026-07,37.758,-122.392,True,SF
+17th St at Valencia St,2017,2026-07,37.763,-122.422,True,SF
+Bryant St at 15th St,2017,2022-11,37.767,-122.411,False,SF
+5th at Folsom; 5th St at Folsom,2017,2019-09,37.78,-122.403,False,SF
+5th St at Brannan St,2017,2019-11,37.777,-122.399,False,SF
+Howard St at 2nd St; Salesforce Transit Center (Natoma St at 2nd St); Salesforce Transit Center; Tehama St at 2nd St,2017,2026-07,37.787,-122.398,True,SF
+Irwin St at 8th St; 8th St at Hooper St,2017,2026-07,37.767,-122.4,True,SF
+Townsend St at 5th St,2017,2026-07,37.775,-122.397,True,SF
+Webster St at Grove St,2017,2026-07,37.777,-122.43,True,SF
+17th St at Dolores St,2017,2026-07,37.763,-122.426,True,SF
+Precita Park,2017,2026-07,37.747,-122.411,True,SF
+Laguna St at McAllister St,2017,2018-01,37.779,-122.427,False,SF
+16th St at Prosper St,2017,2026-07,37.764,-122.432,True,SF
+17th & Folsom Street Park (17th St at Folsom St),2017,2024-05,37.764,-122.415,False,SF
+Duboce Park,2017,2026-07,37.769,-122.434,True,SF
+Broadway at Battery St,2017,2026-07,37.799,-122.401,True,SF
+Sanchez St at 17th St,2017,2026-07,37.763,-122.431,True,SF
+Bryant St at 6th St,2017,2026-07,37.776,-122.403,True,SF
+San Bruno Ave at 16th St,2017,2018-07,37.766,-122.406,False,SF
+Jersey St at Church St,2017,2026-07,37.751,-122.427,True,SF
+Cesar Chavez St at Dolores St,2017,2026-07,37.748,-122.425,True,SF
+2nd St at Townsend St - Coming Soon; Colin P Kelly Jr St at Townsend St (Temporary Site); 2nd St at Townsend St,2017,2026-07,37.781,-122.39,True,SF
+Dolores St at 22nd St; 22nd St at Dolores St,2017,2026-07,37.755,-122.426,True,SF
+Potrero Ave and Mariposa St; Potrero Ave at Mariposa St,2018-01,2026-07,37.763,-122.407,True,SF
+Pierce St at Haight St,2018-03,2026-07,37.772,-122.434,True,SF
+Bryant St at 2nd St,2018-03,2026-07,37.783,-122.394,True,SF
+Hubbell St at 16th St,2018-04,2026-07,37.766,-122.398,True,SF
+16th St Depot,2018-04,2020-07,37.766,-122.396,False,SF
+8th St at Brannan St,2018-05,2026-07,37.771,-122.406,True,SF
+Howard St at Mary St,2018-05,2020-01,37.781,-122.406,False,SF
+Valencia St at Clinton Park,2018-06,2026-07,37.769,-122.422,True,SF
+23rd St at Tennessee St,2018-06,2026-07,37.755,-122.389,True,SF
+Mission Bay Kids Park,2018-06,2026-07,37.772,-122.393,True,SF
+Folsom St at 13th St,2018-06,2026-07,37.77,-122.416,True,SF
+4th St at 16th St,2018-06,2026-07,37.767,-122.391,True,SF
+Berry St at King St,2018-06,2026-07,37.772,-122.398,True,SF
+Turk St at Fillmore St,2018-08,2026-07,37.78,-122.432,True,SF
+23rd St at San Bruno Ave,2018-09,2026-07,37.754,-122.404,True,SF
+Lane St at Revere Ave,2018-09,2026-07,37.732,-122.39,True,SF
+Williams Ave at Apollo St,2018-09,2026-07,37.73,-122.399,True,SF
+Newhall St at 3rd St; Jerrold Ave at 3rd St; Jerrold St at 3rd St,2018-09,2026-07,37.739,-122.39,True,SF
+Mendell St at Fairfax Ave; Mendall St at Fairfax Ave,2018-09,2022-11,37.74,-122.386,False,SF
+Myrtle St at Polk St,2018-10,2026-07,37.785,-122.42,True,SF
+Jones St at Post St,2018-10,2026-07,37.787,-122.413,True,SF
+Grove St at Masonic Ave,2018-10,2026-07,37.775,-122.447,True,SF
+Hyde St at Post St,2018-10,2026-07,37.787,-122.417,True,SF
+Potrero del Sol Park (25th St at Utah St),2018-10,2024-05,37.752,-122.405,False,SF
+Lombard St at Columbus Ave,2018-10,2026-07,37.803,-122.414,True,SF
+20th St at Dolores St,2018-11,2026-07,37.758,-122.426,True,SF
+Fell St at Stanyan St,2018-11,2026-07,37.772,-122.454,True,SF
+Guerrero Park,2018-11,2026-07,37.746,-122.422,True,SF
+Williams Ave at 3rd St,2018-11,2026-07,37.729,-122.393,True,SF
+Masonic Ave at Turk St,2018-12,2026-07,37.779,-122.447,True,SF
+China Basin St at 3rd St,2019-01,2026-07,37.772,-122.39,True,SF
+15th St at Potrero Ave,2019-01,2026-07,37.767,-122.407,True,SF
+Alamo Square (Steiner St at Fulton St); Alamo Square,2019-01,2026-07,37.778,-122.433,True,SF
+Golden Gate Ave at Franklin St,2019-01,2026-07,37.781,-122.422,True,SF
+24th St at Bartlett St; Bartlett St at 24th St,2019-02,2023-06,37.752,-122.42,False,SF
+Leavenworth St at Broadway,2019-02,2026-07,37.796,-122.417,True,SF
+Parker Ave at McAllister St,2019-02,2026-07,37.776,-122.453,True,SF
+Indiana St at Cesar Chavez St; Minnesota St Depot - Monolith*,2019-03,2026-07,37.75,-122.39,True,SF
+Randall St at Chenery St,2019-03,2026-07,37.74,-122.426,True,SF
+Buchanan St at North Point St,2019-03,2026-07,37.804,-122.434,True,SF
+Bay St at Fillmore St,2019-03,2026-07,37.803,-122.436,True,SF
+Jackson St at Polk St,2019-03,2026-07,37.794,-122.422,True,SF
+Goettingen St at Bacon St,2019-03,2026-07,37.727,-122.407,True,SF
+Octavia Blvd at Page St,2019-04,2026-07,37.774,-122.424,True,SF
+Illinois St at 20th St,2019-04,2026-07,37.76,-122.388,True,SF
+Illinois St at Cesar Chavez St,2019-04,2026-07,37.75,-122.387,True,SF
+Glen Park BART Station; Glen Park BART,2019-04,2026-07,37.733,-122.434,True,SF
+Fern St at Polk St; Polk St at Bush St,2019-05,2026-07,37.788,-122.42,True,SF
+Greenwich St at Webster St,2019-05,2026-07,37.799,-122.434,True,SF
+Balboa Park BART Station; Balboa Park BART Station 2; Balboa Park BART 2 (Gevena Ave); Balboa Park BART 2,2019-05,2026-07,37.721,-122.448,True,SF
+Carl St at Cole St,2019-06,2026-07,37.766,-122.449,True,SF
+Judson Ave at Gennessee St,2019-06,2026-07,37.728,-122.451,True,SF
+Gennessee St at Monterey Blvd,2019-06,2026-07,37.732,-122.451,True,SF
+Mint St at Mission St,2019-08,2026-07,37.782,-122.407,True,SF
+Utah St at 24th St,2019-08,2023-09,37.753,-122.405,False,SF
+Natoma St at New Montgomery St,2019-08,2025-08,37.787,-122.4,False,SF
+San Francisco Caltrain Station (King St at 4th St); San Francisco Caltrain Station East; San Francisco Caltrain North; San Francisco Caltrain Station - King St; San Francisco Caltrain Station - 4th St,2019-09,2026-07,37.776,-122.394,True,SF
+Terry Francois Blvd at Warriors Way,2019-09,2026-07,37.769,-122.386,True,SF
+Brannan St at 4th St,2019-09,2026-07,37.778,-122.397,True,SF
+McAllister St at Arguello Blvd,2019-09,2026-07,37.775,-122.458,True,SF
+Pier 1/2 at The Embarcadero; Pier 1/2 at The Embarcadero Overflow; Pier 1/2 at The Embarcadero Virtual Station,2019-09,2026-07,37.796,-122.395,True,SF
+Chestnut St at Van Ness Ave,2019-09,2026-07,37.802,-122.425,True,SF
+Cruise Terminal at Pier 27,2019-09,2026-07,37.804,-122.402,True,SF
+Terry Francois Blvd at Mission Bay Blvd N,2019-09,2026-07,37.771,-122.387,True,SF
+The Embarcadero at Pier 38,2019-09,2026-07,37.783,-122.388,True,SF
+McKinnon Ave at 3rd St,2019-09,2026-07,37.736,-122.39,True,SF
+Carroll Ave at 3rd St,2019-09,2026-07,37.725,-122.394,True,SF
+Arguello Blvd at Geary Blvd,2019-09,2026-07,37.781,-122.459,True,SF
+7th Ave at Cabrillo St,2019-09,2026-07,37.775,-122.465,True,SF
+Heron's Head Park,2019-09,2026-07,37.74,-122.377,True,SF
+Oakdale Ave at Phelps St,2019-09,2026-07,37.737,-122.394,True,SF
+Jennings St at Revere Ave,2019-09,2026-07,37.729,-122.387,True,SF
+Folsom St at 5th St,2019-10,2024-08,37.781,-122.403,False,SF
+Brannan St at Colin P Kelly Jr St,2019-10,2026-07,37.782,-122.391,True,SF
+14th Ave at Geary Blvd,2019-10,2026-07,37.78,-122.473,True,SF
+Grove St at Gough St,2019-10,2026-07,37.778,-122.423,True,SF
+Post St at Divisadero St,2019-10,2026-07,37.784,-122.439,True,SF
+Quesada Ave at 3rd St,2019-10,2026-07,37.733,-122.391,True,SF
+5th Ave at Anza St,2019-10,2026-07,37.779,-122.463,True,SF
+Turk Blvd at Stanyan St,2019-10,2026-07,37.778,-122.455,True,SF
+Ellis St at Pierce St; Pierce St at Ellis St,2019-10,2026-07,37.782,-122.436,True,SF
+Evans Ave at Mendell St,2019-10,2026-07,37.74,-122.384,True,SF
+Steiner St at California St,2019-11,2026-07,37.789,-122.435,True,SF
+Folsom St at 7th St,2019-11,2024-10,37.777,-122.408,False,SF
+Powell St at Columbus Ave,2019-11,2026-07,37.8,-122.411,True,SF
+O'Farrell St at Masonic Ave,2019-11,2026-07,37.781,-122.447,True,SF
+17th Ave at Geary Blvd,2019-11,2026-07,37.781,-122.476,True,SF
+Funston Ave at Fulton St,2019-11,2026-07,37.773,-122.471,True,SF
+7th St at King St,2019-11,2026-07,37.771,-122.401,True,SF
+9th Ave at Geary Blvd,2019-11,2026-07,37.782,-122.468,True,SF
+Funston Ave at Clement St,2019-11,2026-07,37.782,-122.472,True,SF
+Arguello Blvd at Edward St,2019-11,2026-07,37.778,-122.459,True,SF
+Greenwich St at Franklin St,2019-11,2026-07,37.8,-122.426,True,SF
+Webster St at Clay St,2019-11,2026-07,37.791,-122.433,True,SF
+Egbert Ave at Jennings St,2019-11,2026-07,37.723,-122.392,True,SF
+Frederick St at Arguello Blvd,2019-12,2026-07,37.766,-122.458,True,SF
+Frida Kahlo Way at Cloud Cir,2019-12,2026-07,37.726,-122.452,True,SF
+Funston Ave at Irving St,2020-01,2026-07,37.764,-122.471,True,SF
+Market St at Steuart St,2020-01,2026-07,37.794,-122.395,True,SF
+Battery St at Filbert St,2020-01,2026-07,37.802,-122.402,True,SF
+Otis St at Brady St,2020-01,2026-07,37.772,-122.42,True,SF
+10th Ave at Irving St,2020-01,2026-07,37.764,-122.467,True,SF
+7th Ave at Irving St,2020-01,2026-07,37.763,-122.464,True,SF
+7th Ave at Clement St,2020-01,2026-07,37.782,-122.465,True,SF
+Howard St at 6th St,2020-02,2026-07,37.78,-122.406,True,SF
+Post St at Webster St,2020-02,2026-07,37.785,-122.432,True,SF
+Anza St at Collins St,2020-02,2026-07,37.781,-122.45,True,SF
+Divisadero St at Clay St,2020-02,2026-07,37.79,-122.441,True,SF
+St. Joseph's Ave at Geary Blvd; St Joseph's Ave at Geary Blvd; Saint Joseph's Ave at Geary Blvd,2020-02,2026-07,37.783,-122.442,True,SF
+Evans Ave at Newhall St,2020-02,2026-07,37.742,-122.387,True,SF
+Green St at Van Ness Ave,2020-03,2026-07,37.798,-122.424,True,SF
+48th Ave at Cabrillo St,2020-03,2026-07,37.773,-122.509,True,SF
+23rd Ave at Clement St,2020-03,2026-07,37.782,-122.483,True,SF
+Alameda St at Henry Adams St,2020-03,2026-07,37.769,-122.404,True,SF
+Clement St at 32nd Ave,2020-03,2026-07,37.782,-122.493,True,SF
+18th Ave at California St,2020-03,2026-07,37.785,-122.478,True,SF
+Spruce St at California St,2020-03,2026-07,37.787,-122.453,True,SF
+Laurel St at California St,2020-03,2026-07,37.787,-122.45,True,SF
+22nd St at Potrero Ave,2020-03,2026-07,37.757,-122.406,True,SF
+Minnesota St Depot; SF Depot-2 (Minnesota St Outbound); SF Depot-2 (Minnesota St Incoming); Minnesota St Depot (Outgoing),2020-05,2026-07,37.755,-122.39,True,SF
+28th Ave at Geary Blvd,2020-06,2023-09,37.78,-122.488,False,SF
+Stanyan St at Geary Blvd,2020-06,2026-07,37.781,-122.456,True,SF
+38th Ave at Balboa St,2020-06,2026-07,37.776,-122.498,True,SF
+34th Ave at Balboa St,2020-06,2026-07,37.776,-122.494,True,SF
+21st Ave at Geary Blvd,2020-06,2023-09,37.78,-122.48,False,SF
+Tehama St at 1st St,2020-06,2026-07,37.788,-122.395,True,SF
+Post St at Baker St,2020-06,2026-07,37.784,-122.443,True,SF
+Front St at California St,2020-07,2026-07,37.793,-122.399,True,SF
+Arlington St at Roanoke St,2020-07,2026-07,37.735,-122.43,True,SF
+Fulton St at Laguna St,2020-07,2026-07,37.778,-122.426,True,SF
+Alemany Blvd at Silver Ave,2020-07,2026-07,37.73,-122.433,True,SF
+Delano Ave at Oneida Ave,2020-07,2026-07,37.722,-122.444,True,SF
+Townsend St at 6th St,2020-08,2026-07,37.773,-122.4,True,SF
+Haight St at Lyon St,2020-08,2026-07,37.771,-122.442,True,SF
+Eucalyptus Dr at 20th Ave,2020-09,2026-07,37.731,-122.476,True,SF
+Font Blvd at Arballo Dr,2020-09,2026-07,37.722,-122.483,True,SF
+Holloway Ave at Arellano Ave,2020-09,2026-07,37.721,-122.479,True,SF
+Great Hwy at Balboa St; Great Highway at Balboa St,2020-09,2026-07,37.775,-122.511,True,SF
+Fillmore St at Jefferson St,2020-10,2026-07,37.805,-122.437,True,SF
+Allyne Park (Green St at Gough St); Allyne Park,2020-10,2026-07,37.797,-122.427,True,SF
+London St at Geneva Ave,2020-10,2026-07,37.716,-122.44,True,SF
+7th Ave at Lawton St,2020-11,2026-07,37.759,-122.464,True,SF
+North Point St at Grant Ave,2021-03,2026-07,37.807,-122.409,True,SF
+North Point St at Polk St,2021-03,2026-07,37.805,-122.423,True,SF
+Jennings St at Egbert Ave,2021-03,2021-05,37.723,-122.393,False,SF
+Powell St at Bay St,2021-03,2021-05,37.806,-122.412,False,SF
+Greenwich St at Gough St,2021-03,2026-07,37.8,-122.427,True,SF
+Cesar Chavez St at Michigan St,2021-04,2022-07,37.75,-122.386,False,SF
+Lab - Howard; Old Hastings Monolith; Firmware Test Internal Howard ,2021-05,2023-10,37.775,-122.414,False,SF
+North Point St at Powell St,2021-05,2026-07,37.807,-122.411,True,SF
+Bush St at Polk St,2021-06,2022-01,37.789,-122.421,False,SF
+Washington St at Van Ness Ave,2021-07,2026-07,37.793,-122.423,True,SF
+Lyon St at Fell St,2021-12,2026-07,37.774,-122.443,True,SF
+Page St at Masonic Ave,2022-01,2026-07,37.771,-122.445,True,SF
+Polk St at Post St,2022-01,2026-07,37.787,-122.42,True,SF
+4th St at Gene Friend Way,2022-01,2026-07,37.769,-122.391,True,SF
+4th St at Long Bridge St,2022-01,2026-07,37.774,-122.391,True,SF
+Hospital St at Mariposa St,2022-01,2026-07,37.765,-122.391,True,SF
+Montgomery St at Pacific Ave,2022-01,2026-07,37.797,-122.404,True,SF
+Lafayette Park (Laguna St at Washington St); Lafayette Park,2022-01,2026-07,37.792,-122.429,True,SF
+Anza Ave at Lincoln Blvd; Lincoln Blvd at Graham St,2022-02,2026-07,37.802,-122.456,True,SF
+Lyon St at Lombard St,2022-02,2026-07,37.798,-122.447,True,SF
+Waller St at Stanyan St,2022-02,2023-06,37.768,-122.453,False,SF
+Torney Ave at Lincoln Blvd,2022-02,2026-07,37.8,-122.453,True,SF
+Scott St at California St,2022-02,2026-07,37.788,-122.439,True,SF
+MacArthur Ave at Fernandez St,2022-02,2026-07,37.797,-122.456,True,SF
+Alemany Blvd at Francis St,2022-02,2026-07,37.727,-122.436,True,SF
+Brighton Ave at Ocean Ave,2022-02,2026-07,37.723,-122.455,True,SF
+SFSU University Park North - East; SFSU Park East,2022-02,2026-07,37.726,-122.477,True,SF
+SFSU University Park North - West; SFSU Park West,2022-02,2026-07,37.726,-122.479,True,SF
+Balboa Park (San Jose Ave at Sgt. John V. Young Ln); Balboa Park,2022-02,2026-07,37.725,-122.443,True,SF
+X-DEV-MTL-01; China Basin Park,2022-02,2026-07,37.776,-122.388,True,SF
+Brannan St at Harriet St,2022-03,2026-07,37.774,-122.402,True,SF
+Battery St at California St; Battery Street at California St,2022-03,2022-10,37.793,-122.4,False,SF
+Irving St at 18th Ave,2022-03,2023-02,37.764,-122.477,False,SF
+Howard St at Grace St; *Howard St at Grace St,2022-03,2026-07,37.774,-122.414,True,SF
+25th Ave at Irving St,2022-03,2026-07,37.763,-122.484,True,SF
+Irving St at 21st Ave,2022-03,2026-07,37.764,-122.479,True,SF
+Post St at Laguna St (Temporary for Post St at Webster),2022-04,2022-04,37.786,-122.428,False,SF
+Divisadero St at Lombard St,2022-04,2026-07,37.799,-122.443,True,SF
+Hearst Ave at Detroit St; Detroit St at Hearst Ave,2022-04,2026-07,37.731,-122.444,True,SF
+Grant Ave at Sutter St,2022-05,2026-07,37.79,-122.405,True,SF
+Laguna St at Grove St (Fulton St at Laguna St); Laguna St at Grove St,2022-07,2024-12,37.778,-122.427,False,SF
+Mason St at Halleck St,2022-07,2026-07,37.804,-122.455,True,SF
+4040 3rd St Depot Station,2022-07,2022-10,37.741,-122.389,False,SF
+Folsom St at Main St,2022-09,2026-07,37.789,-122.392,True,SF
+Berry St at 4th St Station 2; Berry St at 4th St Station 2*; S Park St at 2nd St; Delancey St at Brannan St,2022-09,2026-07,37.78,-122.39,True,SF
+Howard Grace #2; Berry St at 4th St*; Howard Internal Monolith; Howard St at Grace St*; Lab - NYC - Monolith; Howard Internal Monolith - IoT,2022-09,2026-07,37.77,-122.41,True,SF
+Webster St at Union St,2022-09,2026-07,37.797,-122.434,True,SF
+Hardly Strictly Bluegrass; Hardly Strictly Bluegrass(Temporary Station); Outside Lands; Outside Lands-Temp (John F Kennedy Dr at Transverse Dr),2022-09,2025-10,37.771,-122.479,False,SF
+Clay St at Lyon St,2022-10,2026-07,37.789,-122.445,True,SF
+Harrison St at 14th St,2022-11,2026-07,37.769,-122.414,True,SF
+McAllister St at Franklin St,2022-11,2023-05,37.78,-122.423,False,SF
+Clement St at Funston Ave,2023-01,2023-07,37.783,-122.472,False,SF
+14th Ave at Fulton St (Temp for Funston/Fulton),2023-01,2023-07,37.773,-122.472,False,SF
+26th Ave at Noriega St; 21st Ave at Noriega St,2023-02,2026-07,37.75,-122.48,True,SF
+Octavia St at Hayes St,2023-02,2023-06,37.78,-122.42,False,SF
+41st Ave at Irving St; 36th Ave at Irving St; 36th Ave at Kirkham St; 43rd Ave at Lawton St,2023-02,2026-07,37.76,-122.5,True,SF
+30th Ave at Noriega St,2023-02,2026-07,37.75,-122.49,True,SF
+Irving St at 17th Ave,2023-02,2026-07,37.76,-122.48,True,SF
+La Playa St at Lincoln Way,2023-02,2026-07,37.76,-122.51,True,SF
+45th Ave at Noriega St; Ortega St at 40th Ave; 37th Ave at Ortega St,2023-03,2026-07,37.75,-122.5,True,SF
+Francisco St at Columbus Ave,2023-03,2026-07,37.8,-122.42,True,SF
+Lower Great Hwy at Noriega St,2023-03,2024-05,37.75,-122.51,False,SF
+Hudson Ave at 3rd St,2023-03,2026-07,37.74,-122.39,True,SF
+Post St at Laguna St,2023-04,2026-04,37.79,-122.43,False,SF
+Mabini St at Folsom St,2023-04,2026-07,37.78,-122.4,True,SF
+Scott St at Turk St,2023-05,2023-09,37.78,-122.437,False,SF
+Taylor St at Columbus Ave,2023-05,2026-07,37.803,-122.415,True,SF
+Waller St at Shrader St,2023-06,2026-07,37.768,-122.452,True,SF
+24th St BART Station; 24th St BART,2023-06,2026-07,37.752,-122.419,True,SF
+Mason St at Bay St,2023-07,2026-07,37.805,-122.414,True,SF
+Stowe Lake; Blue Heron Lake,2023-08,2026-07,37.771,-122.477,True,SF
+Martin Luther King Dr at 7th Ave; MLK Dr at 7th Ave; MLK Jr Dr at 7th Ave,2023-08,2026-07,37.767,-122.464,True,SF
+8th Ave at John F Kennedy Dr; 8th Ave at JFK Dr,2023-08,2026-07,37.773,-122.466,True,SF
+Bowling Green,2023-08,2026-07,37.769,-122.459,True,SF
+36th Ave at Spreckels Lake Dr,2023-08,2026-07,37.771,-122.496,True,SF
+Pompei Circle at John F Kennedy Dr; Pompei Circle at JFK Dr,2023-08,2026-07,37.772,-122.458,True,SF
+John F Kennedy Dr at Great Hwy; JFK Dr at Great Hwy; JFK Dr at Great Highway,2023-08,2026-07,37.77,-122.511,True,SF
+South Lake,2023-08,2026-07,37.765,-122.501,True,SF
+Chain O' Lakes,2023-08,2026-07,37.768,-122.502,True,SF
+26th Ave at Clement St,2023-09,2026-07,37.782,-122.486,True,SF
+Anza St at 19th Ave,2023-09,2026-07,37.779,-122.478,True,SF
+Russia Ave at Madrid St,2023-09,2026-07,37.72,-122.434,True,SF
+Crocker-Amazon Playground (Geneva Ave at Moscow St); Crocker-Amazon Playground,2023-09,2026-07,37.713,-122.433,True,SF
+Brazil Ave at La Grande Ave,2023-09,2026-07,37.72,-122.425,True,SF
+Alemany Blvd at Ocean Ave,2023-09,2026-07,37.723,-122.438,True,SF
+Larkin St at California St,2023-10,2026-07,37.791,-122.419,True,SF
+Ocean Blvd at Lagunitas Dr to Junipero Sera Blvd; Ocean Blvd: Lagunitas Dr to Junipero Sera Blvd,2023-11,2024-04,37.732,-122.473,False,SF
+Jackson St at Sansome St,2023-11,2026-07,37.797,-122.402,True,SF
+West Portal Ave at 15th Ave to Ulloa St East,2023-11,2023-11,37.74,-122.467,False,SF
+Laguna Honda Hospital; LH1,2023-11,2026-07,37.749,-122.457,True,SF
+Quintara St at 22nd Ave to 21st Ave,2023-11,2023-11,37.749,-122.479,False,SF
+Lloyd Lake,2023-11,2026-07,37.77,-122.482,True,SF
+Firmware Test Charging Internal Howard ; Test,2023-11,2026-07,37.751,-122.403,True,SF
+Taraval St at 27th Ave to 25th Ave,2023-11,2026-07,37.743,-122.483,True,SF
+Taraval St at 41st Ave to 40th Ave,2023-11,2026-07,37.742,-122.499,True,SF
+West Portal: 15th to Ulloa East; West Portal MUNI,2023-11,2026-07,37.741,-122.466,True,SF
+Taraval St at 23rd Ave to 21st Ave; Taraval St at 22nd St,2023-11,2026-07,37.743,-122.479,True,SF
+ Sloat Blvd at The Great Highway to 46th Ave; San Francisco Zoo,2023-11,2026-07,37.735,-122.505,True,SF
+Taraval St: 41st St to 40th St; Taraval-4,2023-11,2026-07,37.742,-122.498,True,SF
+Forest Hill Muni Station,2023-11,2026-07,37.748,-122.459,True,SF
+Great Hwy at Taraval St; Taraval St at The Great Highway to 45th Ave; Great Highway at Taraval St,2023-11,2026-07,37.742,-122.507,True,SF
+Vincente St at The Great Highway,2023-11,2023-11,37.739,-122.507,False,SF
+West Portal at 15th Ave to Ulloa Street; West Portal: 15th to Ulloa West,2023-11,2025-01,37.738,-122.469,False,SF
+Ocean Avenue at Fairfield Way to Plymouth Ave West; Ocean-2W,2023-11,2023-11,37.725,-122.462,False,SF
+Vincente St at Great Hwy,2023-11,2026-07,37.738,-122.506,True,SF
+Hellman Hollow,2023-11,2026-07,37.77,-122.485,True,SF
+30th Ave,2023-11,2026-07,37.771,-122.49,True,SF
+Great Hwy At Rivera St; Rivera St at The Great Highway; Rivera-1,2023-11,2024-10,37.746,-122.507,False,SF
+Ocean Avenue East: to Plymouth Ave; Ocean Avenue at Fairfield Way to Plymouth Ave East; Ocean-2E; E Ocean Avenue: Fairfield Way to Plymouth Ave East,2023-11,2026-07,37.724,-122.459,True,SF
+Ocean Ave West: To Fairfield Way,2023-11,2026-07,37.725,-122.461,True,SF
+Quintara at 21st,2023-11,2024-10,37.749,-122.478,False,SF
+Buchanan St at Lombard St,2023-12,2026-07,37.801,-122.433,True,SF
+Fell St at Clayton St,2024-01,2026-07,37.773,-122.449,True,SF
+Valencia St at Duncan St,2024-02,2026-07,37.747,-122.42,True,SF
+3rd St at King St,2024-03,2026-07,37.778,-122.391,True,SF
+Daly City BART,2024-03,2026-07,37.708,-122.468,True,SF
+West Crissy Field,2024-04,2026-07,37.804,-122.468,True,SF
+Cambon Dr at Castelo Ave,2024-04,2026-07,37.718,-122.474,True,SF
+Lakewood Ave at Ocean Ave,2024-04,2026-07,37.726,-122.464,True,SF
+Junipero Serra Blvd at Ocean Ave,2024-04,2026-07,37.731,-122.472,True,SF
+Cortland Ave at Wool St,2024-04,2026-07,37.739,-122.417,True,SF
+Great Highway at Noriega St,2024-05,2026-07,37.753,-122.509,True,SF
+La Playa St at Judah St,2024-05,2024-10,37.761,-122.509,False,SF
+Toland St at Jerrold Ave,2024-05,2026-07,37.744,-122.399,True,SF
+In Chan Kaajal Park,2024-05,2026-07,37.764,-122.416,True,SF
+Balboa Park BART,2024-05,2026-07,37.723,-122.447,True,SF
+Mechanics Monument Plaza,2024-05,2026-07,37.792,-122.4,True,SF
+Montgomery St BART Station,2024-05,2024-05,37.791,-122.403,False,SF
+Potrero del Sol Park,2024-05,2026-07,37.752,-122.406,True,SF
+San Francisco Caltrain East,2024-05,2024-09,37.776,-122.395,False,SF
+Judson Ave at Foerster St,2024-06,2024-08,37.728,-122.449,False,SF
+Quintara St at Great Highway,2024-10,2026-07,37.747,-122.508,True,SF
+Vicente St at 26th Ave,2024-10,2026-07,37.739,-122.483,True,SF
+Lincoln Blvd at Hoffman St,2024-10,2026-07,37.806,-122.47,True,SF
+Great Highway at Judah St,2024-10,2026-07,37.761,-122.51,True,SF
+Parque Ninos Unidos,2024-10,2026-07,37.754,-122.413,True,SF
+37th Ave at Rivera St,2024-10,2026-07,37.746,-122.495,True,SF
+24th Ave at Quintara St,2024-10,2026-07,37.749,-122.482,True,SF
+Crissy Field Overlook,2024-11,2026-07,37.804,-122.47,True,SF
+Golden Gate Ave at Baker St,2024-11,2025-02,37.778,-122.442,False,SF
+Sansome St at Sutter St,2024-12,2026-07,37.791,-122.401,True,SF
+Sanchez St at 24th St,2024-12,2025-08,37.752,-122.43,False,SF
+Vicksburg St at 24th St,2024-12,2024-12,37.752,-122.429,False,SF
+Byxbee St at Shields St,2025-01,2026-07,37.718,-122.47,True,SF
+Ashton Ave at Holloway Ave,2025-01,2026-07,37.722,-122.462,True,SF
+Drumm St at Market St,2025-02,2026-07,37.794,-122.396,True,SF
+Pine St at Market St,2025-02,2026-07,37.792,-122.398,True,SF
+Main St at Market St,2025-03,2026-02,37.793,-122.396,False,SF
+Berry HQ,2025-03,2025-03,37.776,-122.392,False,SF
+Sutter St at Montgomery St,2025-03,2026-07,37.79,-122.402,True,SF
+15th St at Valencia St,2025-04,2026-07,37.767,-122.422,True,SF
+Kearny St at Bush St,2025-04,2026-07,37.791,-122.404,True,SF
+Bush St at Leavenworth St,2025-06,2026-07,37.789,-122.415,True,SF
+Sutter St at Taylor St,2025-06,2026-07,37.789,-122.412,True,SF
+Lincoln Blvd at Bowley St,2025-06,2026-07,37.792,-122.481,True,SF
+Illinois St at 16th St,2025-06,2026-07,37.767,-122.388,True,SF
+Powell St at Green St,2025-06,2026-07,37.799,-122.411,True,SF
+Folsom St at 21st St,2025-07,2026-07,37.757,-122.415,True,SF
+Taylor St at Pacific Ave,2025-07,2026-07,37.796,-122.413,True,SF
+Howard St at Hawthorne St,2025-08,2026-06,37.786,-122.4,True,SF
+Vicente St at 27th Ave,2025-08,2025-09,37.739,-122.484,False,SF
+29th St at San Jose Ave,2025-08,2025-08,37.744,-122.422,False,SF
+Mission St at Beale St,2025-09,2026-07,37.791,-122.396,True,SF
+Westlake Library,2025-09,2026-07,37.697,-122.485,True,SF
+Westlake Shopping Center,2025-09,2026-07,37.7,-122.481,True,SF
+Mission St at John Daly Blvd,2025-09,2026-07,37.705,-122.462,True,SF
+Templeton Ave at Mission St,2025-09,2026-07,37.708,-122.455,True,SF
+Edgeworth Ave at 91st St,2025-09,2026-07,37.69,-122.474,True,SF
+Filbert St at Powell Street,2025-10,2025-11,37.801,-122.411,False,SF
+Minna St at 1st St; Natoma St at 1st St; Salesforce Tower Virtual Station,2025-10,2026-07,37.789,-122.397,True,SF
+School St at Bruno Ave,2025-10,2026-07,37.693,-122.466,True,SF
+Westlake Ave at Miriam St,2025-10,2026-07,37.7,-122.465,True,SF
+Rio Verde St at Geneva Ave,2025-10,2026-07,37.707,-122.416,True,SF
+S Outer Mission - Point 1 ,2025-10,2026-03,37.711,-122.448,False,SF
+W Bayview - Point 1 ,2025-10,2025-10,37.74,-122.399,False,SF
+Folsom St at 1st St,2025-11,2026-07,37.787,-122.395,True,SF
+VIRTUAL STATION - Transbay Terminal; Salesforce Transit Center Overflow; Salesforce Transit Center Virtual Station,2026-02,2026-07,37.788,-122.398,True,SF
+Howard St at Beale St Overflow\n; Howard St at Beale St Virtual Station; Beale St at Howard St,2026-03,2026-07,37.79,-122.394,True,SF
+Bayshore Caltrain Virtual Station,2026-03,2026-07,37.709,-122.402,True,SF
+Rhode Island St at 16th St,2026-04,2026-05,37.766,-122.403,True,SF
+Ferry Plaza Virtual Station,2026-04,2026-07,37.794,-122.393,True,SF
+Pier 27 Virtual Station,2026-04,2026-07,37.805,-122.402,True,SF
+Kearny St at California St,2026-05,2026-07,37.793,-122.405,True,SF
+Main St at Howard St,2026-06,2026-07,37.791,-122.394,True,SF
+Clay St at Davis St,2026-06,2026-07,37.795,-122.398,True,SF
+Polk St at Clay St - Two Segments,2026-06,2026-07,37.792,-122.421,True,SF
+Vallejo St at Stockton St - Two Segments,2026-06,2026-07,37.799,-122.409,True,SF
+Webster St at Post St,2026-07,2026-07,37.786,-122.432,True,SF
+Scott St at Geary Blvd,2026-07,2026-07,37.784,-122.438,True,SF
+San Salvador St at 9th St,2017,2026-07,37.334,-121.877,True,San Jose
+5th St at Virginia St,2017,2026-07,37.326,-121.877,True,San Jose
+The Alameda at Bush St,2017,2026-07,37.332,-121.905,True,San Jose
+Santa Clara St at Almaden Blvd,2017,2026-07,37.334,-121.895,True,San Jose
+Morrison Ave at Julian St; W Julian St at N Morrison St; N Morrison Ave at W Julian St,2017,2026-07,37.334,-121.909,True,San Jose
+Cahill Park,2017,2026-07,37.329,-121.905,True,San Jose
+Paseo De San Antonio at 2nd St,2017,2026-07,37.334,-121.887,True,San Jose
+San Salvador St at 1st St,2017,2019-04,37.33,-121.886,False,San Jose
+Julian St at The Alameda,2017,2026-07,37.332,-121.913,True,San Jose
+SAP Center,2017,2026-07,37.333,-121.9,True,San Jose
+San Fernando at 7th St; San Fernando St at 7th St,2017,2026-07,37.337,-121.883,True,San Jose
+San Carlos St at Market St,2017,2026-07,37.331,-121.889,True,San Jose
+Locust St at Grant St,2017,2026-07,37.323,-121.888,True,San Jose
+San Fernando St at 4th St,2017,2026-07,37.336,-121.886,True,San Jose
+Willow St at Vine St,2017,2026-07,37.318,-121.883,True,San Jose
+San Carlos St at 11th St,2017,2026-07,37.336,-121.877,True,San Jose
+Market St at Park St,2017,2020-07,37.332,-121.89,False,San Jose
+Pierce Ave at Market St,2017,2026-07,37.328,-121.885,True,San Jose
+Santa Clara St at 7th St,2017,2026-07,37.339,-121.884,True,San Jose
+Autumn Parkway at Coleman Ave,2017,2026-07,37.341,-121.903,True,San Jose
+Ryland Park,2017,2026-07,37.343,-121.896,True,San Jose
+Delmas Ave and San Fernando St,2017,2026-07,37.33,-121.898,True,San Jose
+5th St at San Salvador St,2017,2026-07,37.332,-121.882,True,San Jose
+William St at 10th St,2017,2026-07,37.333,-121.876,True,San Jose
+9th St at San Fernando; 9th St at San Fernando St,2017,2026-07,37.338,-121.881,True,San Jose
+S. 4th St at San Carlos St; 4th St at San Carlos St,2017,2026-07,37.333,-121.884,True,San Jose
+San Pedro Square,2017,2026-07,37.337,-121.894,True,San Jose
+Jackson St at 5th St,2017,2026-07,37.349,-121.895,True,San Jose
+San Jose Diridon Station,2017,2026-07,37.33,-121.902,True,San Jose
+Bestor Art Park,2017,2026-07,37.324,-121.874,True,San Jose
+Julian St at 6th St,2017,2026-07,37.343,-121.889,True,San Jose
+Saint James Park,2017,2026-07,37.339,-121.89,True,San Jose
+W St John St at Guadalupe River Trail,2017,2018-03,37.335,-121.898,False,San Jose
+5th St at Taylor St,2017,2026-07,37.351,-121.896,True,San Jose
+Almaden Blvd at Balbach St,2017,2026-07,37.327,-121.889,True,San Jose
+Mission St at 1st St,2017,2026-07,37.351,-121.902,True,San Jose
+Almaden Blvd at San Fernando St,2017,2026-07,37.331,-121.893,True,San Jose
+San Jose City Hall,2017,2026-07,37.337,-121.887,True,San Jose
+Palm St at Willow St,2017,2026-07,37.317,-121.885,True,San Jose
+George St at 1st St,2017,2026-07,37.348,-121.899,True,San Jose
+Empire St at 1st St,2017,2026-07,37.345,-121.897,True,San Jose
+Fountain Alley at S 2nd St,2018-01,2026-07,37.336,-121.889,True,San Jose
+Oak St at 1st St,2018-02,2026-07,37.322,-121.881,True,San Jose
+San Pedro St at Hedding St,2018-03,2026-07,37.353,-121.906,True,San Jose
+NULL,2018-06,2019-05,37.4,-121.92,False,San Jose
+2nd St at Julian St,2018-07,2026-07,37.341,-121.893,True,San Jose
+Empire St at 7th St; 7th St at Empire St,2018-10,2026-07,37.348,-121.891,True,San Jose
+Backesto Park (Jackson St at 13th St); Backesto Park,2019-02,2026-07,37.353,-121.886,True,San Jose
+Taylor St at 9th St,2019-02,2026-07,37.353,-121.892,True,San Jose
+Kerley Dr at Rosemary St,2019-03,2026-07,37.361,-121.907,True,San Jose
+Gish Rd at 1st St,2019-03,2026-07,37.362,-121.909,True,San Jose
+Asbury St at The Alameda,2019-03,2026-07,37.338,-121.919,True,San Jose
+Skyport Dr at Technology Dr,2019-03,2026-07,37.365,-121.917,True,San Jose
+Bird Ave at Coe Ave,2019-03,2026-07,37.315,-121.898,True,San Jose
+10th St at Mission St,2019-03,2026-07,37.356,-121.892,True,San Jose
+10th St at Empire St,2019-03,2026-07,37.349,-121.888,True,San Jose
+Sonora Ave at 1st St,2019-03,2026-07,37.364,-121.912,True,San Jose
+Sunol St at San Carlos St,2019-03,2026-07,37.323,-121.906,True,San Jose
+Raymond Bernal Jr Memorial Park (8th St at Hedding St); Raymond Bernal Jr Memorial Park,2019-03,2026-07,37.357,-121.896,True,San Jose
+1st St at Younger Ave,2019-03,2026-07,37.355,-121.904,True,San Jose
+Metro Dr at Technology Dr,2019-03,2026-07,37.368,-121.919,True,San Jose
+Parkmoor Ave at Race St,2019-04,2026-07,37.317,-121.91,True,San Jose
+Auzerais Ave at Los Gatos Creek Trail,2019-04,2026-07,37.321,-121.903,True,San Jose
+Park Ave at Race St,2019-04,2026-07,37.326,-121.912,True,San Jose
+Delmas Ave at Virginia St,2019-04,2026-07,37.32,-121.893,True,San Jose
+17th St at Santa Clara St,2019-04,2026-07,37.344,-121.874,True,San Jose
+1st St at San Carlos Ave; 1st St at San Carlos St,2019-05,2026-07,37.331,-121.887,True,San Jose
+Stockton Ave at Lenzen Ave,2019-05,2026-07,37.337,-121.909,True,San Jose
+21st St at Santa Clara St,2019-05,2023-04,37.346,-121.871,False,San Jose
+Auzerais Ave at Lincoln Ave,2019-05,2026-07,37.321,-121.908,True,San Jose
+Bird Ave at Willow St,2019-05,2026-07,37.311,-121.896,True,San Jose
+San Carlos St at Meridian Ave,2019-05,2026-07,37.323,-121.913,True,San Jose
+South San Jose State (7th St at Humboldt St); South San Jose State,2019-05,2026-07,37.32,-121.87,True,San Jose
+23rd St at Taylor St,2019-05,2026-07,37.36,-121.879,True,San Jose
+3rd St at Keyes St,2019-06,2025-07,37.321,-121.876,False,San Jose
+San Jose Depot,2019-06,2023-11,37.344,-121.915,False,San Jose
+N 14th St at E Santa Clara St,2019-09,2026-07,37.343,-121.877,True,San Jose
+22nd St at William St,2019-10,2026-07,37.34,-121.864,True,San Jose
+Newbury Park Dr at King Rd,2019-10,2026-03,37.366,-121.868,False,San Jose
+Columbia Ave at Bird Ave,2019-10,2026-07,37.324,-121.9,True,San Jose
+16th Depot Bike Fleet Station; EB Test Station,2019-10,2025-02,0.0,0.0,False,San Jose
+Willow St at Blewett Ave,2019-10,2026-07,37.309,-121.9,True,San Jose
+19th St at William St,2019-10,2026-07,37.338,-121.867,True,San Jose
+Devine St at San Pedro St,2019-11,2026-07,37.339,-121.896,True,San Jose
+St James St at 9th St; Saint James St at 9th St,2019-12,2026-07,37.343,-121.884,True,San Jose
+Park Ave at Laurel Grove Ln,2019-12,2026-07,37.326,-121.905,True,San Jose
+Mercado Way at Sierra Rd,2019-12,2026-07,37.371,-121.881,True,San Jose
+Virginia St at 2nd St; E Virginia St at S 2nd St,2021-02,2025-03,37.324,-121.881,False,San Jose
+Berryessa BART Station (Mabury Rd at Lenfest Rd); Berryessa BART; Lenfest Rd at Mabury Rd,2022-05,2026-07,37.365,-121.872,True,San Jose
+23rd St at Santa Clara St,2023-04,2026-07,37.346,-121.869,True,San Jose
+De Rome Dr at Sierra Rd,2025-10,2026-07,37.37,-121.88,True,San Jose
+San Jose City Hall Temporary,2026-03,2026-03,37.338,-121.887,False,San Jose
+Long Beach City Hall,2026-05,2026-05,33.758,-118.141,True,San Jose
