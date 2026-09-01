@@ -1,211 +1,114 @@
-# PRD: Venture Capital Firm Website
+# PRD: Generative Vision — Website for a Lean Venture Firm
 
-**Status:** Draft v1.0
+**Status:** Draft v2.0 (trimmed for a firm of <10 people)
 **Date:** 2026-09-01
-**Reference model:** a16z.com (Andreessen Horowitz), generalized for any venture firm
+**Reference model:** a16z.com structure, cut down to what a small team can credibly build and sustain
 
 ---
 
-## 1. Background & Purpose
+## 1. Background
 
-A venture firm's website is not a brochure; it is a deal-flow instrument. The firms that treat it that way (a16z being the canonical example) structure the site around a specific insight: **the scarce resource in venture is no longer capital, it's founder attention**, and the website's job is to win that attention before a partner ever takes a meeting.
+v1 of this PRD generalized a16z.com — the media-company outlier with a full editorial arm. A firm of fewer than ten people copying that skeleton gets empty sections that signal worse than no sections. v2 keeps the structural insights that scale down and cuts everything that requires headcount:
 
-Analyzing a16z.com yields a repeatable structure. The site serves five distinct audiences with different intents, and every top-level section maps to at least one of them:
+**Kept (the insights that scale):**
+- The site is a deal-flow instrument; its job is winning founder attention.
+- One shared taxonomy (focus area) tags companies, people, and writing, so every listing page is a filtered query — this is cheap and it's the spine.
+- Portfolio as social proof, with the compliance disclaimer treated as structural.
+- Thesis-first homepage.
 
-| Audience | Intent | Sections that serve them |
-|---|---|---|
-| Founders (prospective) | "Should I want this firm on my cap table?" | Portfolio, Team, Focus Areas, Content |
-| Founders (portfolio) | "What resources do I get?" | Platform/Services, Programs, Jobs board |
-| Limited partners | "Is this firm credible and compliant?" | About, Portfolio (exits), Disclosures |
-| Press & researchers | "What does this firm think?" | Content hub, About, Team |
-| Talent | "Would I work here or at a portfolio company?" | Jobs (firm), Jobs (portfolio network), Programs |
+**Cut (requires headcount the firm doesn't have):**
+- Programs (accelerators, fellowships, community series)
+- Portfolio-wide jobs board
+- Podcast production, multi-newsletter operation, books/long-form imprint
+- Per-vertical landing pages (collapsed into one Thesis page with sections)
+- Heavy CMS + editorial workflow (replaced by flat files / markdown + static site generation)
 
-This PRD defines the components, functional requirements, data model, and compliance constraints for a VC website built on that structure.
+## 2. Goals
 
-## 2. Goals & Non-Goals
+1. Establish thesis and differentiation within 10 seconds — carried by the landing experience (§4.1), not by AUM stats the firm doesn't have.
+2. Portfolio browsable and legible as proof, compliant by construction.
+3. Publish writing with near-zero operational overhead (markdown in the repo, one newsletter).
+4. Whole site maintainable by any partner in an afternoon; no dedicated web staff.
 
-### Goals
-1. Establish the firm's investment thesis and differentiation within 10 seconds of landing.
-2. Make the portfolio browsable, filterable, and legible as social proof.
-3. Publish thought leadership (articles, podcasts, newsletters) as a first-class product — content is the top of the deal-flow funnel.
-4. Present the team as operators/experts, not just check-writers.
-5. Meet SEC marketing-rule and disclosure obligations without burying them.
-
-### Non-Goals
-- LP portal / fund reporting (separate authenticated product).
-- Deal submission pipeline / CRM (link out or embed a form; the pipeline itself is out of scope).
-- E-commerce, community forums, event ticketing (v2+ candidates).
+**Non-goals:** LP portal, deal CRM, podcast network, jobs board, per-vertical pages, comment systems.
 
 ## 3. Information Architecture
 
-Generalized sitemap, derived from a16z's top navigation (Portfolio, Team, Focus Areas, Content, Programs, Company):
-
 ```
-Home
-├── Portfolio
-│   └── Company detail (optional; may link out)
-├── Team
-│   └── Person detail
-├── Focus Areas (one page per vertical/fund, e.g. AI, Bio, Fintech, Consumer…)
-├── Content
-│   ├── Articles / Blog
-│   ├── Podcasts
-│   ├── Newsletters (signup + archive)
-│   └── Books / Long-form (optional)
-├── Programs (accelerator, scout, talent, community — optional)
-├── Company
-│   ├── About
-│   ├── Jobs (at the firm)
-│   ├── Jobs (across portfolio — external board)
-│   └── Offices / Contact
-└── Legal
-    ├── Disclosures
-    ├── Terms of Use
-    └── Privacy Policy
+Home (interactive landing — the "Generative Vision" journey, §4.1)
+├── Portfolio        (single filterable grid)
+├── Team             (≤10 people, one page, no detail pages at this size)
+├── Thesis           (one page, one section per focus area)
+├── Writing          (article index + newsletter signup)
+└── Legal            (Disclosures · Terms · Privacy)
 ```
 
-**Navigation requirement:** persistent global header with ≤6 top-level items; verticals and content types nest under dropdowns. Footer repeats full sitemap plus legal links, social links, and newsletter signup.
+Global nav: 4 links + wordmark. Footer: sitemap, legal links, newsletter, one email address.
 
 ## 4. Component Requirements
 
-### 4.1 Home
+### 4.1 Home — the Generative Vision landing experience
 
-The homepage is thesis-first, not portfolio-first. a16z leads with its founding conviction ("Software is eating the world") before showing anything else.
+The homepage is the differentiation budget. Instead of a stat strip the firm can't match, it is an interactive, scroll-driven journey that literalizes the firm's name and thesis: the same network flows re-projected across the future industries the firm invests in.
 
-**Requirements:**
-- **H-1** Hero: firm name + one-line thesis/tagline. No carousel.
-- **H-2** Credibility strip: AUM, fund count, founding year, notable exits — 3–5 stats max.
-- **H-3** Featured content: 3–6 latest/pinned articles or podcast episodes, editorially curated.
-- **H-4** Focus-area index: card grid linking to each vertical page.
-- **H-5** Portfolio teaser: logo wall of recognizable companies, linking to full portfolio.
-- **H-6** Newsletter CTA above the footer.
+**Narrative sequence (five acts, one continuous camera move):**
+
+1. **City** — an isometric, living 3D city at night; glowing flow particles travel the street grid connecting neighborhoods and buildings. Hero wordmark and tagline overlay.
+2. **Circuit** — the camera dives into a city block; the street grid is revealed as an integrated-circuit layout. The *same* graph and the *same* flows now run as pulses along copper traces into a central die.
+3. **Body** — the camera enters a via and emerges inside an artery; cells stream along the vessel with a heartbeat cadence, branching until the flows become synapses firing across a neural field.
+4. **Machine** — the camera pulls back from the synapses: the brain is on an operating table, and a surgical robot's articulated arms are operating on it, its probes carrying the same pulses.
+5. **Loop** — the camera pulls out of the operating-room window: the room is one lit window in the city from act 1. Full skyline again; closing thesis copy and pitch CTA.
+
+**Functional requirements:**
+- **H-1** Scroll scrubs the journey (URL-stable, ~6 viewport-heights); an autoplay control plays it end-to-end; a progress rail with five labeled stops jumps between acts.
+- **H-2** Continuity is literal, not implied: acts 1 and 2 share one node/edge graph and one set of flow routes; the particle system is the single visual motif across all five acts.
+- **H-3** Interactive: pointer parallax; click/tap emits a pulse burst in the current act's palette.
+- **H-4** Each act carries a copy block mapping it to an investment area (cities & infrastructure → silicon & compute → bio & neurotech → robotics & automation → the loop/thesis + CTA).
+- **H-5** At rest (scroll 0) the page is complete: city, wordmark, tagline, nav — nothing hidden behind interaction.
+- **H-6** `prefers-reduced-motion`: no autoplay, ambient motion damped, acts still reachable by scroll/rail.
+- **H-7** Canvas-rendered, no heavyweight 3D dependency; 60fps target on a mid-range laptop, devicePixelRatio capped; degrades to fewer particles on weak GPUs.
+- **H-8** Fully usable on mobile (touch scroll = scrub).
 
 ### 4.2 Portfolio
-
-The single highest-traffic proof page. a16z's implementation: filterable grid of ~800+ companies with per-company metadata, plus a legally mandated methodology disclaimer.
-
-**Requirements:**
-- **P-1** Grid of company cards: logo, name, one-line description, link to company site.
-- **P-2** Filters (multi-select, URL-persisted so filtered views are shareable):
-  - Focus area / sector
-  - Stage at first investment (Pre-Seed → Growth)
-  - Status (Active / Acquired / IPO)
-  - Fund or vintage year (optional)
-- **P-3** Free-text search by company name.
-- **P-4** Exits surfaced distinctly (badge or dedicated tab) — IPOs and acquisitions are the strongest LP-facing signal.
-- **P-5** Compliance disclaimer adjacent to the grid stating the listing methodology: which investments are included/excluded, that the list is not exhaustive, that inclusion is not an endorsement, and that past results don't guarantee future returns. (a16z maintains a separate full "Investment List" page for this reason; provide the same or an equivalent complete list.)
-- **P-6** Data-driven: portfolio entries live in structured data (CMS or flat file), not hand-edited markup. Target render <1s for 1,000 entries (virtualize or paginate beyond ~200 visible).
-
-**Company data model:**
-
-```
-Company {
-  name, logo, url, description (≤140 chars),
-  focusAreas[], stageAtEntry, firstInvestmentYear,
-  status: active | acquired | ipo,
-  fund (optional), featured: bool, coInvestDisclosureFlags[]
-}
-```
+- **P-1** Card grid: logo, name, one-liner, link. Data from one flat file (JSON/YAML) — same schema as PRD v1.
+- **P-2** Filters: focus area, status (active/acquired/IPO). Stage and vintage filters deferred until the portfolio is big enough to need them.
+- **P-3** Methodology disclaimer adjacent to the grid (inclusion criteria, not an endorsement, past results ≠ future returns). Counsel-reviewed once; template thereafter.
 
 ### 4.3 Team
+- **T-1** One page, ≤10 entries: photo, name, focus, 2–3 sentence operating-history bio, links. No detail pages, no directory filters — at this size they're overhead.
 
-a16z's framing: "investors who've built before, operators who clear the path." The page sells *people as product*.
+### 4.4 Thesis
+- **V-1** One page, one section per focus area (~200–400 words each), each auto-listing its tagged portfolio companies and writing.
+- **V-2** Adding a focus area = one taxonomy term + one copy section.
 
-**Requirements:**
-- **T-1** Filterable directory: photo, name, title, focus area.
-- **T-2** Group by function: Investing (GPs, partners) vs. Operating/Platform (talent, marketing, GTM, policy, legal) vs. Operations.
-- **T-3** Person detail page: bio emphasizing operating history, focus areas, authored content (auto-linked from the content hub), investments led (optional, compliance-reviewed), social links.
-- **T-4** CMS-managed; a departure must be removable in minutes, not a deploy cycle.
+### 4.5 Writing
+- **C-1** Markdown articles in the repo; index with topic/author tags; article pages with byline, date, OpenGraph metadata, RSS.
+- **C-2** One newsletter: signup (ESP-hosted form) + archive links. No podcast section unless a show actually exists.
+- **C-3** Standing disclaimer block on every post (views ≠ investment advice).
 
-### 4.4 Focus Areas (Verticals)
+### 4.6 Legal
+- **L-1** Disclosures, Terms, Privacy; linked from every footer. Same SEC Marketing Rule obligations as v1 — firm size doesn't shrink these.
 
-a16z gives each practice (AI, Bio + Health, Crypto, Fintech, Enterprise, Consumer, Infrastructure, Growth, American Dynamism…) its own landing page combining thesis + team + portfolio + content. This is the template's key generalizable move: **one page per vertical, assembled from the same underlying data as the rest of the site.**
+## 5. Cross-Cutting
 
-**Requirements:**
-- **V-1** Thesis statement: why the firm invests here, in the firm's own voice (500–1,500 words or a manifesto-style hero).
-- **V-2** Auto-populated modules, each filtered to the vertical: team members, portfolio companies, recent content.
-- **V-3** Vertical-specific CTA (e.g., the relevant newsletter, or "pitch us").
-- **V-4** Adding a vertical requires only a new taxonomy term + thesis copy — no new page engineering.
-
-### 4.5 Content Hub
-
-a16z operates as a media company (podcast network, multiple newsletters, books, an editorial arm). Generalized minimum viable version:
-
-**Requirements:**
-- **C-1** Article index with filters by topic/vertical and author; article template with byline linking to team pages, publish date, related content, and share metadata (OpenGraph/Twitter cards).
-- **C-2** Podcast section: episode list, embedded player, links out to Spotify/Apple/RSS.
-- **C-3** Newsletter: signup (double opt-in, ESP integration) + browsable archive. Per-vertical newsletters optional.
-- **C-4** All content tagged with the same taxonomy (vertical, topic, author) that drives Portfolio and Team — one taxonomy, many surfaces.
-- **C-5** RSS feeds for articles and each podcast.
-- **C-6** Editorial workflow: draft → review → publish, with scheduled publishing.
-
-### 4.6 About
-
-**Requirements:**
-- **A-1** Origin story and founding conviction (a16z: founded 2009 on "software eats the world").
-- **A-2** How the firm works: stages invested, check sizes (optional), platform/services model.
-- **A-3** Key stats (AUM, funds, team size) — same source of truth as homepage stats.
-- **A-4** Values / how-we-behave section (optional but differentiating).
-
-### 4.7 Jobs & Programs
-
-- **J-1** Firm jobs: embed or link to ATS (Greenhouse/Lever), as a16z does.
-- **J-2** Portfolio jobs board: aggregate roles across portfolio companies (e.g., Getro/Consider integration, as jobs.a16z.com does). This is a founder-facing service, not just recruiting.
-- **J-3** Programs pages (accelerator, fellowships, community dinners à la a16z Build): template of description + eligibility + application CTA. Optional module; ship only if the firm runs programs.
-
-### 4.8 Legal & Disclosures
-
-Non-negotiable for a registered investment adviser under the SEC Marketing Rule (Rule 206(4)-1).
-
-**Requirements:**
-- **L-1** Disclosures page: portfolio listing methodology, testimonial/endorsement policy, performance-claim policies.
-- **L-2** Terms of use, privacy policy, cookie consent (GDPR/CCPA as applicable).
-- **L-3** Every page footer links to all three.
-- **L-4** Content pages carry a standard "views are the author's own / not investment advice" disclaimer block.
-- **L-5** Legal review gate in the publishing workflow for any page naming portfolio companies or performance.
-
-## 5. Cross-Cutting Requirements
-
-### 5.1 Content model (the actual spine of the site)
-
-Five entities and one taxonomy power everything:
-
-- **Company**, **Person**, **Content item** (article/podcast/newsletter issue), **Focus Area** (taxonomy), **Page** (about, disclosures, programs).
-- Every entity is taggable by Focus Area; every listing page is a filtered query. This is what lets a16z present the same data as a portfolio grid, a vertical page, and a person's "investments" list without triple-entry.
-
-### 5.2 Non-functional
-
-- **N-1 Performance:** LCP <2.5s on 4G; portfolio page interactive <3s with full dataset.
-- **N-2 SEO:** SSR/SSG for all public pages; structured data (Organization, Person, Article, PodcastEpisode); clean shareable URLs for filtered views.
-- **N-3 Accessibility:** WCAG 2.1 AA; logo walls need alt text; filters keyboard-navigable.
-- **N-4 Analytics:** page views, newsletter conversions, portfolio-filter usage, content engagement; UTM-clean.
-- **N-5 CMS:** non-engineers publish content, edit team/portfolio entries, and reorder homepage features without deploys.
-- **N-6 Responsive:** full parity on mobile; founders read VC content on phones.
+- **Stack:** static site generation from flat files; no CMS, no database. Publishing = merge to main.
+- **Taxonomy:** one `focusArea` vocabulary shared by companies, people, posts.
+- **Non-functional:** LCP <2.5s (landing canvas paints progressively behind the hero text); WCAG 2.1 AA for all document pages; landing journey is progressive enhancement over a readable text layer; structured data on articles and org.
 
 ## 6. Success Metrics
 
-| Metric | Target (first 6 months) |
+| Metric | Target |
 |---|---|
-| Newsletter signup conversion (site-wide) | ≥2% of unique visitors |
-| Content: avg. engaged time on articles | ≥2 min |
-| Portfolio page: filter interaction rate | ≥30% of page visitors |
-| Inbound qualified deal flow attributable to site/content | Baseline established, then +20% QoQ |
-| Time-to-publish for a new article | <1 hour, no engineer involved |
-| Team page update latency (join/departure) | Same day |
+| Landing: reach act 5 (completion of the journey) | ≥25% of visitors |
+| Newsletter conversion | ≥2% of uniques |
+| Time-to-publish an article | <30 min, any partner |
+| Site maintenance | zero dedicated headcount |
 
-## 7. Phasing
+## 7. Open Questions
 
-- **v1 (launch):** Home, Portfolio (with filters + disclaimer), Team, About, Articles, Newsletter signup, Legal pages.
-- **v1.1:** Focus Area pages, Podcasts, portfolio jobs board.
-- **v2:** Programs, multi-newsletter, books/long-form, person↔content↔company auto-crosslinking, search across the whole site.
-
-## 8. Open Questions
-
-1. Does the firm's counsel require a complete investment list (à la a16z's separate Investment List page), or does a curated portfolio with methodology disclaimer suffice?
-2. Are check sizes / stage focus public, or intentionally vague?
-3. Podcast: original production or embed-only?
-4. Should exited companies remain on the main grid (badge) or move to a separate exits view?
+1. Does counsel want a complete investment list page, or does the curated grid + disclaimer suffice at this portfolio size?
+2. Does the landing journey ship as the homepage or as `/vision` with a conventional homepage fallback? (Recommend: homepage — it *is* the differentiation.)
 
 ---
 
-*Sources for structural analysis: a16z.com homepage, /portfolio/, /team/, /about/, vertical pages (/growth/, /enterprise/, /fintech/, /consumer/), /investment-list/, jobs.a16z.com, build.a16z.com.*
+*Prototype of §4.1 lives at `generative-vision/index.html` in this repo.*
