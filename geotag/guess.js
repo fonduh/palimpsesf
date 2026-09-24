@@ -10,11 +10,9 @@ const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"
 const yearOf=p=>{const m=/(1[89]\d\d|20\d\d)/.exec(p.date||"");return m?+m[0]:null;};
 const POOL=(window.PHOTO_GEOJSON||{features:[]}).features.filter(f=>{
   const p=f.properties;
-  return yearOf(p)&&(p.iiif||(p.src==='wikimedia'&&p.img));
+  return yearOf(p)&&p.iiif;
 });
-const bigSrc=p=>p.src==='wikimedia'
-  ? p.img.replace(/\/(\d+)px-/,'/1024px-')
-  : 'https://digitalsf.org/nanna/proxy/iiif/image/'+p.iiif+'/full/%5E1024,/0/default.jpg';
+const bigSrc=p=>'https://digitalsf.org/nanna/proxy/iiif/image/'+p.iiif+'/full/%5E1024,/0/default.jpg';
 // the location line: street/hood only — never the caption, which tends to contain the answer
 const whereOf=p=>{
   const street=(p.query||'').replace(/,\s*San Francisco.*/i,'').trim();
@@ -60,8 +58,7 @@ $('go').onclick=()=>{
   $('vline').textContent=off===0?truth+' — DEAD ON. +100'
     :'IT WAS '+truth+' — off by '+off+' year'+(off===1?'':'s')+' · +'+pts;
   $('vcap').innerHTML='“'+esc(p.caption)+'”'
-    +(p.src==='wikimedia'?' <span style="opacity:.55">· '+esc((p.artist||'').trim())+' · Wikimedia Commons</span>'
-                         :' <span style="opacity:.55">· SFPL Historical Photograph Collection</span>')
+    +' <span style="opacity:.55">· SFPL Historical Photograph Collection</span>'
     +(cur.geometry?' · <a href="map.html#ll='+cur.geometry.coordinates[1]+','+cur.geometry.coordinates[0]+',18">see it on the map →</a>':'');
   $('verdict').classList.add('on');
   rounds();

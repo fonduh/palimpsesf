@@ -17,9 +17,8 @@ let LAT=null,LNG=null,HEAD=null,shown='';
 const dist=(la1,lo1,la2,lo2)=>{const x=(lo2-lo1)*Math.cos((la1+la2)*Math.PI/360)*111320,y=(la2-la1)*110540;return Math.hypot(x,y);};
 const dAng=(a,b)=>{let d=Math.abs(a-b)%360;return d>180?360-d:d;};
 
-function thumbSrc(p){ return p.src==='wikimedia'?p.img:('thumbs/'+p.recid+'.jpg'); }
+function thumbSrc(p){ return 'thumbs/'+p.recid+'.jpg'; }
 function bigSrc(p){
-  if(p.src==='wikimedia'&&p.img)return p.img.replace(/\/(\d+)px-/,'/1600px-');
   if(p.iiif)return 'https://digitalsf.org/nanna/proxy/iiif/image/'+p.iiif+'/full/%5E1600,/0/default.jpg';
   return 'thumbs/'+p.recid+'.jpg';
 }

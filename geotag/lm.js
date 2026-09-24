@@ -22,7 +22,6 @@ let cur=0, ST=null;   // ST: {entries, focus, ang, step, R} for the current caro
 
 function imgFor(e){
   if(e.t==='photo'){
-    if(e.src==='wikimedia'&&e.img)return e.img;
     if(e.recid)return 'thumbs/'+e.recid+'.jpg';
   }
   if(e.t==='occupant'&&e.img)return e.img;
@@ -35,7 +34,7 @@ function entriesFor(l){
     if(!BAD.has(u))es.push({t:'photo',y:null,d:l.name+' — the city’s own photograph',u,official:true});}
   return es;
 }
-const srcName=e=>e.official?'SF Planning':(e.src==='wikimedia'?'Wikimedia Commons':'SFPL DigitalSF');
+const srcName=e=>e.official?'SF Planning':'SFPL DigitalSF';
 // ring radius: cards must clear each other; half-width 125 + breathing room
 const radiusFor=n=>n<3?170:Math.max(170,Math.round(141/Math.tan(Math.PI/n)));
 

@@ -108,10 +108,10 @@
     </div>
     <div id="nearhud"><div class="nstat" id="nstat">◉ locating…</div></div>
   </div>
-<script src="photos-data.js?v=20260710"></script>
+<script src="photos-data.js?v=20260924"></script>
 <script src="moments-data.js?v=20260709"></script>
 <script src="hoods-data.js?v=20260709"></script>
-<script src="landmarks-data.js" onerror="window.LANDMARKS=[]"></script>
+<script src="landmarks-data.js?v=20260924" onerror="window.LANDMARKS=[]"></script>
 <script src="config.js" onerror=""></script><!-- optional: window.MAPILLARY_TOKEN for inline street-level imagery (gitignored) -->
 <script>
 const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
@@ -255,21 +255,16 @@ const LB=document.createElement("div"); LB.id="lb"; document.body.appendChild(LB
 let LBctxOn=false;
 const yearOf=p=>{const m=/(1[89]\d\d|20\d\d)/.exec(p.date||"");return m?+m[0]:null;};
 const iiifURL=p=>"https://digitalsf.org/nanna/proxy/iiif/image/"+p.iiif+"/full/%5E1600,/0/default.jpg";
-const isWM=p=>p.src==="wikimedia";
-const wmBig=u=>u.replace(/\/(\d+)px-/,"/1600px-");
-const thumbSrc=p=>isWM(p)?p.img:("thumbs/"+p.recid+".jpg");
-const attrib=p=>isWM(p)?'<span style="opacity:.55;font-size:9px;margin-left:8px">'+esc((p.artist||"").trim())+(p.license?" · "+esc(p.license):"")+" · Wikimedia Commons</span>":"";
+const thumbSrc=p=>"thumbs/"+p.recid+".jpg";
 function closeLB(){ LB.classList.remove("on"); LB.innerHTML=""; }
 function openLB(f){
   const p=f.properties, lng=f.geometry.coordinates[0], lat=f.geometry.coordinates[1];
   LBctxOn=false; LB.classList.add("on");
-  const imgsrc=isWM(p)?wmBig(p.img):(p.iiif?iiifURL(p):"thumbs/"+p.recid+".jpg");
-  const fb=isWM(p)
-    ? ' onerror="if(!this.dataset.f){this.dataset.f=1;this.src=\''+esc(p.img)+'\'}else{this.remove()}"'
-    : ' onerror="if(!this.dataset.f){this.dataset.f=1;this.src=\'thumbs/'+p.recid+'.jpg\'}else if(this.dataset.f==1){this.dataset.f=2;this.src=\'https://digitalsf.org/nanna/thumbnail/image/'+p.recid+'?version=v2\'}else{this.remove()}"';
+  const imgsrc=p.iiif?iiifURL(p):"thumbs/"+p.recid+".jpg";
+  const fb=' onerror="if(!this.dataset.f){this.dataset.f=1;this.src=\'thumbs/'+p.recid+'.jpg\'}else if(this.dataset.f==1){this.dataset.f=2;this.src=\'https://digitalsf.org/nanna/thumbnail/image/'+p.recid+'?version=v2\'}else{this.remove()}"';
   LB.innerHTML='<div class="lbtop">'
     +'<span class="lbyr">'+(yearOf(p)||"UNDATED")+'</span>'
-    +'<span class="lbcap">'+esc(p.caption)+attrib(p)+'</span>'
+    +'<span class="lbcap">'+esc(p.caption)+'</span>'
     +'<button class="lbbtn" id="lbcmp">⇆ Now</button>'
     +'<button class="lbbtn" id="lbctxb">ⓘ Context</button>'
     +'<button class="lbbtn" id="lbx">✕ Close</button></div>'

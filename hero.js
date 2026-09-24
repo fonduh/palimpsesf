@@ -198,16 +198,11 @@ function buildParcelData(){
     const rec=P[b], newFmt=Array.isArray(rec[0][0]);
     const ring=newFmt?rec[0]:rec, street=newFmt?(rec[1]||''):'', hood=newFmt?(rec[2]||''):'';
     const lm=lmBy[b]||null, ph=IX[b]||[];
-    // a parcel earns its place on the map only if it can actually show a photograph
-    let nimg=ph.length;
-    if(lm){ nimg+=(lm.timeline||[]).filter(e=>e.t==='photo'&&(e.recid||e.img)).length;
-            if(lm.photo)nimg++; }
-    if(!nimg)continue;
-    const ys=[]; let undated=false;
-    ph.forEach(e=>{ if(e[0])ys.push(e[0]); else undated=true; });
-    if(lm)(lm.timeline||[]).forEach(e=>{ if(e.y&&e.t==='photo')ys.push(e.y); });
-    PARCS.push({b,ring,street,hood,lm,ph,ys,undated,r:Math.random()});
+    const p={b,ring,street,hood,lm,ph,r:Math.random()};
+    p.entries=photoEntries(p);
+    if(p.entries.length)PARCS.push(p);
   }
+  verifyPlanningPhotos();
 }
 function projectParcels(){
   if(!PARCS)buildParcelData();
@@ -221,7 +216,8 @@ function projectParcels(){
     p.ucx=(u0+u1)/2; p.ucy=(v0+v1)/2; p.uw=u1-u0; p.uh=v1-v0;
   });
 }
-const inRange=p=> p.undated || (p.lm&&!p.ys.length) || p.ys.some(y=>y>=YLO&&y<=YHI);
+// Drawing, hit testing and the stack all consult the same available photographs.
+const inRange=p=>p.entries.some(photoInRange);
 
 // ---------------- the view: esri-style pan/zoom inside the map's bounding box -----------------
 // wheel zooms about the cursor, drag pans, +/− step, ⌂ resets. Parcels and basemap ride the
@@ -650,34 +646,48 @@ const panel=document.getElementById('panel'), pnlring=document.getElementById('p
 const escH=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let SEL=null, PST=null;
 const PBAD=new Set();
-// wikimedia serves any width — the cards are 315px (×2 dpr): ask for 640px, not 960+
-const wmFit=u=>/upload\.wikimedia\.org\/.*\/thumb\//.test(u)
-  ?u.replace(/\/(\d{2,4})px-([^\/]+)$/,(m,w,f)=>(+w>640?'/640px-':'/'+w+'px-')+f)
-  :u;
-function pnlEntries(p){
-  let es;
-  if(p.lm){
-    es=(p.lm.timeline||[]).filter(e=>e.t==='photo')
-      .map(e=>({y:e.y||0, cap:e.d||'',
-        src:(e.src==='wikimedia'?'wikimedia commons':'sfpl digitalsf'),
-        u:(e.src==='wikimedia'&&e.img)?wmFit(e.img):(e.recid?'geotag/thumbs/'+e.recid+'.jpg':null)}))
-      .filter(e=>e.u);
-    if(p.lm.photo)es.push({y:1e4,now:true,cap:p.lm.name+' — the city\u2019s current photograph',
-      src:'sf planning',u:p.lm.photo.replace('/Large/','/Docs/')});
-  }else{
-    es=p.ph.map(e=>({y:e[0],cap:e[2]||'',
-      src:e[3]?'wikimedia commons':'sfpl digitalsf',
-      u:e[3]?wmFit(e[3]):('geotag/thumbs/'+e[1]+'.jpg')}));   // wm entries hotlink their own thumb
-  }
-  es=es.filter(e=>!PBAD.has(e.u));
-  // the year sliders govern the stack too: dated photos stay only inside [YLO,YHI];
-  // undated ones ride along (they keep the parcel lit at any range); the city's 'now'
-  // photograph only belongs when the range reaches the present
-  es=es.filter(e=>e.now ? YHI>=2026 : (!e.y || (e.y>=YLO&&e.y<=YHI)));
+const PGOOD=new Set(window.PHOTO_ASSETS||[]);
+function photoEntries(p){
+  const byURL=new Map();
+  const add=(recid,y,cap)=>{
+    const u='geotag/thumbs/'+recid+'.jpg';
+    if(PGOOD.has(u)&&!byURL.has(u))byURL.set(u,{y:y||0,cap:cap||'',src:'sfpl digitalsf',u});
+  };
+  // Landmark metadata enriches a parcel; it must never replace its archive index.
+  p.ph.forEach(e=>add(e[1],e[0],e[2]));
+  if(p.lm)(p.lm.timeline||[]).filter(e=>e.t==='photo').forEach(e=>add(e.recid,e.y,e.d));
+  const es=[...byURL.values()];
+  if(p.lm&&p.lm.photo)es.push({y:1e4,now:true,cap:p.lm.name+' — the city\u2019s current photograph',
+    src:'sf planning',u:p.lm.photo.replace('/Large/','/Docs/')});
   es.sort((x,y)=>(x.y||9998)-(y.y||9998));         // chronological; undated after the dated, 'now' last
   return es;
 }
+function photoInRange(e){
+  return PGOOD.has(e.u)&&!PBAD.has(e.u)
+    &&(e.now?YHI>=2026:(!e.y||(e.y>=YLO&&e.y<=YHI)));
+}
+function pnlEntries(p){ return p.entries.filter(photoInRange); }
+function verifyPlanningPhotos(){
+  // Remote metadata is not proof that an image exists. Only light those lots after
+  // an actual image load; use a small queue so archive thumbnails keep priority.
+  const queue=[...new Set(PARCS.flatMap(p=>p.entries.filter(e=>e.now).map(e=>e.u)))];
+  const next=()=>{
+    const u=queue.shift(); if(!u)return;
+    const im=new Image(); let timer;
+    const finish=ok=>{
+      clearTimeout(timer); im.onload=im.onerror=null;
+      if(ok){PGOOD.add(u); if(SEL&&SEL.entries.some(e=>e.u===u))window.__stackRefilter();}
+      else PBAD.add(u);
+      next();
+    };
+    im.onload=()=>finish(im.naturalWidth>0); im.onerror=()=>finish(false);
+    timer=setTimeout(()=>finish(false),10000);
+    im.fetchPriority='low'; im.src=u;
+  };
+  for(let i=0;i<4;i++)next();
+}
 function openPanel(p){
+  if(!inRange(p))return;
   SEL=p;
   pnlkind.textContent=p.lm
     ? (p.lm.landmarkno==='curated'?'curated place':'sf landmark #'+p.lm.landmarkno)+' · parcel '+p.b
@@ -712,11 +722,12 @@ function openPanel(p){
 }
 function buildRing(es){
   if(!es.length){
-    pnlring.innerHTML='<div class="pnlnote">no photographs in this year range —<br>widen the sliders</div>';
+    pnlring.style.transform='none';
+    pnlring.innerHTML='<div class="pnlnote">no photographs available in this year range —<br>try another parcel or widen the sliders</div>';
     PST=null; updRingNav(); return;
   }
-  const n=es.length, R=n<3?250:Math.max(250,Math.round(188/Math.tan(Math.PI/n)));
-  PST={es,focus:n-1,step:360/n,R};   // enter at the newest — scrolling down digs older
+  const n=es.length, step=Math.min(30,360/n), R=Math.max(250,Math.round(188/Math.tan(step*Math.PI/360)));
+  PST={es,focus:n-1,step,R};   // enter at the newest — scrolling down digs older
   // cards are born WITHOUT src: only the wheel-window around the focus fetches (hydrateCards).
   // A 54-photo parcel used to fire 54 requests at once and the front card queued behind
   // 53 others it was hiding — now the visible few load first and the rest load as you turn.
@@ -750,14 +761,16 @@ function layoutRing(){
   if(!PST)return;
   [...pnlring.children].forEach(c=>{
     const i=+c.dataset.i, d=i-PST.focus;
-    // vertical wheel: positive angles ride UP — newer above, older below (y is time)
-    c.style.transform='rotateX('+(i*PST.step)+'deg) translateZ('+PST.R+'px)';
+    // Move along the wheel without rotating the card's reading plane. This also
+    // keeps one-, two- and three-photo stacks upright throughout transitions.
+    const angle=clamp(d*PST.step,-90,90)*Math.PI/180;
+    c.style.transform='translate3d(0,'+(-Math.sin(angle)*PST.R)+'px,'+(PST.R*(Math.cos(angle)-1))+'px)';
     c.classList.toggle('front',d===0);
-    const o=d===0?1:Math.abs(d)===1?.5:Math.abs(d)===2?.24:Math.abs(d)===3?.1:0;
+    const o=Math.abs(d*PST.step)>=90?0:d===0?1:Math.abs(d)===1?.5:Math.abs(d)===2?.24:Math.abs(d)===3?.1:0;
     c.style.opacity=o;
     c.style.pointerEvents=o>0?'auto':'none';
   });
-  pnlring.style.transform='translateZ('+(-PST.R)+'px) rotateX('+(-PST.focus*PST.step)+'deg)';
+  pnlring.style.transform='none';
   hydrateCards();
 }
 function rotateRing(to){

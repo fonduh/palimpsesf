@@ -29,7 +29,7 @@ function refresh(){
   const refs=[];
   if(lm)(lm.timeline||[]).forEach(e=>{
     let u=null;
-    if(e.t==='photo') u=(e.src==='wikimedia'&&e.img)?e.img:(e.recid?'thumbs/'+e.recid+'.jpg':null);
+    if(e.t==='photo') u=e.recid?'thumbs/'+e.recid+'.jpg':null;
     if(e.t==='occupant'&&e.img)u=e.img;
     if(u)refs.push({u,y:e.y});
   });
