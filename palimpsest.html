@@ -103,52 +103,68 @@ footer{padding:0 20px 60px;max-width:1060px;margin:0 auto}
 #zoomctl button{font-family:'Metana',monospace;font-weight:600;font-size:14px;width:26px;height:26px;
   border:2px solid var(--ink);background:var(--paper);cursor:pointer;line-height:1;padding:0}
 #zoomctl button:hover{background:var(--ink);color:var(--paper)}
-/* the floating stack: no panel, no divider — the photographs hang in the air on the right,
-   riding a VERTICAL wheel (y is the time axis: newer up, older down), stitched back to
-   their parcel by blue threads drawn on the canvas. The container is transparent and
-   click-through; only the cards, the nav years, ✕ and the dossier take the pointer. */
-#panel{position:absolute;top:0;right:0;bottom:0;width:min(560px,94vw);z-index:40;
-  background:none;border:none;padding:0;pointer-events:none;overflow:visible;
-  transform:translateX(103%);transition:transform .45s cubic-bezier(.2,.8,.25,1)}
-#panel.open{transform:none}
-#pnlhead{position:absolute;top:20px;right:52px;text-align:right;pointer-events:auto;max-width:82%}
-#pnlkind{font-family:'Whois',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.65}
-#pnlname{font-family:'Metana',monospace;font-weight:600;font-size:17px;text-transform:uppercase;
+/* An edge-to-edge photograph wheel lives in its own column, clear of map and prose. */
+#galleryhint{font-family:'Whois',monospace;font-size:10px;line-height:1.8;text-transform:uppercase;
+  letter-spacing:.12em;text-align:center;transform:translateY(-50%);color:var(--blue)}
+#panel{position:absolute;z-index:40;padding:0;pointer-events:none;overflow:hidden;
+  opacity:0;visibility:hidden;transition:opacity .35s}
+#panel.open{opacity:1;visibility:visible}
+#pnlhead{position:absolute;top:6px;left:16px;right:36px;max-height:78px;overflow:auto;pointer-events:auto}
+#pnlkind,#pnllocation{font-family:'Whois',monospace;font-size:9px;line-height:1.5;
+  letter-spacing:.08em;text-transform:uppercase;opacity:.65}
+#pnllocation{margin-top:4px}
+#pnlname{font-family:'Metana',monospace;font-weight:600;font-size:16px;text-transform:uppercase;
   line-height:1.2;margin-top:4px}
-#pnlclose{position:absolute;top:14px;right:16px;pointer-events:auto;border:0;background:none;
+#pnlclose{position:absolute;top:2px;right:0;pointer-events:auto;border:0;background:none;
   font-family:'Metana',monospace;font-size:19px;cursor:pointer;color:var(--ink);padding:4px}
-.pnav{position:absolute;pointer-events:auto;border:0;background:rgba(233,230,219,.9);
+.pnav{position:absolute;z-index:2;pointer-events:auto;border:0;background:var(--paper);
   cursor:pointer;font-family:'A000-Monochrome',monospace;font-size:15px;color:var(--ink);
-  visibility:hidden;padding:4px 9px}
+  visibility:hidden;padding:4px 9px;left:50%;transform:translateX(-50%)}
 .pnav:hover{color:var(--blue)}
-#pnlolder{top:calc(50% + 26vh);left:50%;transform:translateX(-50%)}
-#pnlnewer{top:calc(50% - 28vh);left:50%;transform:translateX(-50%)}
-#pnlstage{position:absolute;left:0;right:0;top:50%;height:64vh;transform:translateY(-50%);
-  perspective:1200px;pointer-events:none}
-#pnlring{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.25,1)}
-.pnlcard{position:absolute;left:50%;top:50%;width:315px;margin:-140px 0 0 -157px;cursor:pointer;
-  pointer-events:auto;backface-visibility:hidden;opacity:0;transition:opacity .4s,transform .6s cubic-bezier(.2,.8,.25,1)}
-.pnlcard img{width:100%;height:210px;object-fit:cover;display:block;
-  filter:grayscale(1) sepia(.3) contrast(.96);opacity:0;transition:opacity .3s;
-  box-shadow:0 6px 18px rgba(40,32,16,.35)}
+#pnlnewer{top:90px}
+#pnlolder{bottom:174px}
+#pnlstage{position:absolute;left:0;right:0;top:122px;bottom:206px;
+  perspective:1200px;pointer-events:auto;overflow:hidden;touch-action:pan-x}
+#pnlring{position:absolute;inset:0;transform-style:preserve-3d;
+  transition:transform .65s cubic-bezier(.2,.8,.25,1)}
+.pnlcard{position:absolute;left:50%;top:50%;width:var(--card-w);height:var(--card-h);
+  margin-left:calc(var(--card-w) / -2);margin-top:calc(var(--card-h) / -2);
+  padding:0;background:none;cursor:pointer;pointer-events:auto;backface-visibility:hidden;
+  border:0;transition:opacity .3s}
+.pnlcard::after{content:'';position:absolute;inset:0;background:#30291e;opacity:var(--shade,0);pointer-events:none}
+.pnlcard img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:grayscale(1) sepia(.3) contrast(.96);opacity:0;transition:opacity .3s}
 .pnlcard img.ld{opacity:1}
-.pnlcard .pyr{font-family:'A000-Monochrome',monospace;font-size:26px;margin-top:8px;color:var(--ink)}
-.pnlcard .pcap,.pnlcard .psrc{display:none}
-.pnlcard.front .pcap{display:block;font-family:'Whois',monospace;font-size:9.5px;letter-spacing:.06em;
-  text-transform:uppercase;line-height:1.55;margin-top:4px;max-height:46px;overflow:hidden}
-.pnlcard.front .psrc{display:block;font-family:'Whois',monospace;font-size:8.5px;opacity:.55;margin-top:3px;
-  letter-spacing:.1em;text-transform:uppercase}
-.pnlnote{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;
-  font-family:'Whois',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
-  line-height:1.8;color:var(--ink);opacity:.75;background:rgba(233,230,219,.9);padding:10px 14px}
-#pnldetail{position:absolute;left:calc(50% - 157px);right:16px;top:calc(50% + 30vh);pointer-events:auto}
-#pnldetail summary{font-family:'Metana',monospace;font-weight:600;font-size:11.5px;
-  text-transform:uppercase;cursor:pointer;letter-spacing:.04em;display:inline-block;
-  background:rgba(233,230,219,.9);padding:4px 8px}
-#pnlfacts{font-family:'Whois',monospace;font-size:10.5px;line-height:1.7;margin-top:4px;
-  max-height:16vh;overflow:auto;background:rgba(233,230,219,.92);padding:8px 10px}
+#pnlcaption{position:absolute;bottom:48px;left:16px;right:16px;height:112px;overflow:auto;pointer-events:auto}
+#pnlcaption .pyr{font-family:'A000-Monochrome',monospace;font-size:26px;color:var(--ink)}
+#pnlcaption .pcap{font-family:'Whois',monospace;font-size:10px;letter-spacing:.04em;
+  text-transform:uppercase;line-height:1.6;margin-top:5px}
+#pnlcaption .psrc{font-family:'Whois',monospace;font-size:8.5px;opacity:.6;margin-top:5px;
+  letter-spacing:.08em;text-transform:uppercase}
+.pnlnote{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:90%;
+  font-family:'Whois',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;line-height:1.8}
+#pnldetail{position:absolute;left:16px;right:16px;bottom:8px;pointer-events:auto;background:var(--paper)}
+#pnldetail summary{font-family:'Metana',monospace;font-weight:600;font-size:11px;
+  text-transform:uppercase;cursor:pointer;letter-spacing:.04em;padding:4px 0}
+#pnlfacts{font-family:'Whois',monospace;font-size:10px;line-height:1.7;margin-top:4px;
+  max-height:30vh;overflow:auto;padding:8px 0}
 #pnlfacts b{font-family:'Metana',monospace}
 #pnlfacts .story{border-left:2px solid var(--ink);padding-left:8px;margin-top:8px}
+#yearbar .lbl{font-size:9px;line-height:1.5}
+#legend{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:8px}
+#legend span+span{margin-left:0}
+#mapcap{font-size:8px}
+@media(max-width:1099px){#whymod .why{font-size:10px;line-height:1.6}}
+.compact #pnlhead{top:0;max-height:46px}
+.compact #pnlname{font-size:12px}
+.compact #pnlnewer{top:52px;font-size:12px}
+.compact #pnlolder{bottom:106px;font-size:12px}
+.compact #pnlstage{top:78px;bottom:132px}
+.compact #pnlcaption{bottom:28px;height:72px}
+.compact #pnlcaption .pyr{font-size:19px}
+.compact #pnlcaption .pcap{font-size:9px}
+.compact #pnldetail{bottom:0}
+@media(prefers-reduced-motion:reduce){#pnlring{transition:none}}
 
 ul.led{list-style:none;margin-top:10px}
 ul.led li{font-size:13px;line-height:1.55;padding:7px 0;border-top:1.5px dotted currentColor}
@@ -209,12 +225,14 @@ ul.led a:hover b{background:var(--blue);color:var(--paper)}
       <span><i class="sw" style="background:#2456d6"></i>parcel holding photographs</span>
       <span><i class="sw" style="background:#b7d0f2;box-shadow:inset 0 0 0 1.5px #2456d6"></i>designated landmark parcel</span>
     </div>
+    <div id="galleryhint" class="mvpui">select a parcel<br>to unfold its photographs</div>
     <aside id="panel">
-      <div id="pnlhead"><div id="pnlkind"></div><div id="pnlname"></div></div>
+      <div id="pnlhead"><div id="pnlkind"></div><div id="pnlname"></div><div id="pnllocation"></div></div>
       <button id="pnlclose" title="close">×</button>
       <button class="pnav" id="pnlnewer" title="newer — up"></button>
       <div id="pnlstage"><div id="pnlring"></div></div>
       <button class="pnav" id="pnlolder" title="older — down"></button>
+      <div id="pnlcaption" aria-live="polite"></div>
       <details id="pnldetail"><summary>full landmark detail</summary><div id="pnlfacts"></div></details>
     </aside>
     <div id="hint" class="lbl">scroll ↓</div>
@@ -227,6 +245,6 @@ ul.led a:hover b{background:var(--blue);color:var(--paper)}
 <script src="mvp-index.js?v=20260924"></script>
 <script src="photo-assets.js?v=20260924"></script>
 <script src="geotag/landmarks-data.js?v=20260924"></script>
-<script src="hero.js?v=20260924" defer></script>
+<script src="hero.js?v=20260924b" defer></script>
 </body>
 </html>

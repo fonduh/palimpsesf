@@ -1,9 +1,6 @@
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || 'playwright');
 const base = process.env.TEST_URL || 'http://127.0.0.1:8877/';
-const root = path.resolve(__dirname, '..');
 (async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
@@ -14,7 +11,7 @@ const root = path.resolve(__dirname, '..');
     // Expose closure state only in this intercepted test response, never in production.
     await page.route('**/hero.js?*', async route => {
       const original = await (await route.fetch()).text();
-      const hook = `window.__qa={get parcels(){return PARCS},get state(){return PST},get phase(){return PHASE},
+      const hook = `window.__qa={get parcels(){return PARCS},get state(){return PST},get phase(){return PHASE},get map(){return mapBox},get gallery(){return galleryBox},get view(){return VIEW},
         photoEntries,pnlEntries,inRange,openPanel,buildRing,rotateRing,bad:PBAD,good:PGOOD,
         setRange(a,b){YLO=a;YHI=b;window.__stackRefilter()},
         hit(p){return hitParcel(sxOf(p.ucx),syOf(p.ucy))},
@@ -25,7 +22,7 @@ const root = path.resolve(__dirname, '..');
     await page.route('https://sfplanninggis.org/**', route => route.fulfill({ status: 404, body: '' }));
     await page.goto(base, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.__qa?.parcels?.length > 0);
-    await page.locator('#word').click();
+    await page.evaluate(()=>window.scrollTo(0,document.getElementById('stage').offsetHeight-innerHeight));
     await page.waitForFunction(() => window.__qa.phase === 'prompt');
     await page.locator('#sfs').click();
     await page.waitForSelector('#explore');
@@ -64,14 +61,47 @@ const root = path.resolve(__dirname, '..');
         await page.evaluate(i=>window.__qa.rotateRing(i),focus);
         for(const wait of [100,650]) {
           await page.waitForTimeout(wait);
-          const upright=await page.evaluate(()=>[...document.querySelectorAll('.pnlcard')].filter(c=>+getComputedStyle(c).opacity>.05).every(c=>{
-            const m=new DOMMatrix(getComputedStyle(c).transform);return m.m11>0&&m.m22>0&&Math.abs(m.m23)<.001;
-          }));
-          assert(upright, `Text inverted in ${n}-photo stack`);
+          const geometry=await page.evaluate(()=>{
+            const q=window.__qa, cards=[...document.querySelectorAll('.pnlcard')];
+            const caption=document.getElementById('pnlcaption');
+            const m=new DOMMatrix(getComputedStyle(caption).transform);
+            let seam=0;
+            for(let i=0;i<cards.length-1;i++){
+              const a=new DOMPoint(0,-q.state.cardH/2,0).matrixTransform(new DOMMatrix(cards[i].style.transform));
+              const b=new DOMPoint(0,q.state.cardH/2,0).matrixTransform(new DOMMatrix(cards[i+1].style.transform));
+              seam=Math.max(seam,Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z));
+            }
+            const style=getComputedStyle(cards[0]);
+            return {upright:m.m22>0,seam,rotating:document.getElementById('pnlring').style.transform.includes('rotateX'),borderless:parseFloat(style.paddingTop)===0&&parseFloat(style.borderTopWidth)===0};
+          });
+          assert(geometry.upright, `Caption inverted in ${n}-photo carousel`);
+          assert(geometry.rotating, '3D rotation missing');
+          assert(geometry.borderless, 'Unexpected border between photographs');
+          assert(geometry.seam<.1, `Photographs disconnected: ${geometry.seam}px`);
         }
       }
       await page.screenshot({path:`/tmp/palimpsesf-stack-${n}.png`});
     }
+    const beforeWheel=await page.evaluate(()=>({...window.__qa.view}));
+    const stageBox=await page.locator('#pnlstage').boundingBox();
+    await page.mouse.move(stageBox.x+stageBox.width/2,stageBox.y+stageBox.height/2);
+    await page.mouse.wheel(0,120);
+    await page.waitForFunction(()=>window.__qa.state.focus===52);
+    assert.deepEqual(await page.evaluate(()=>({...window.__qa.view})),beforeWheel,'Carousel wheel changed the map');
+    for(const [width,height] of [[1440,1000],[1280,800],[1024,768],[768,1024],[390,844]]){
+      await page.setViewportSize({width,height});
+      await page.waitForTimeout(180);
+      const layout=await page.evaluate(()=>{
+        const q=window.__qa, map=q.map, why=document.getElementById('whymod').getBoundingClientRect(), gallery=document.getElementById('panel').getBoundingClientRect();
+        const overlap=(a,b)=>Math.min(a.x+a.width,b.x+b.width)>Math.max(a.x,b.x)+1&&Math.min(a.y+a.height,b.y+b.height)>Math.max(a.y,b.y)+1;
+        const rect={x:map.x,y:map.y,width:map.w,height:map.h};
+        return {overlap:overlap(rect,why)||overlap(rect,gallery)||overlap(why,gallery),width:map.w,stage:document.getElementById('pnlstage').clientHeight};
+      });
+      assert(!layout.overlap, `Regions overlap at ${width}px`);
+      assert(layout.width>140&&layout.stage>60, `Region too small at ${width}px`);
+      await page.screenshot({path:`/tmp/palimpsesf-layout-${width}.png`});
+    }
+    await page.setViewportSize({width:1440,height:1000});
     // A failed last image must disappear from rendering AND hit testing, not just its card.
     await page.route('**/geotag/thumbs/52.jpg', route=>route.fulfill({status:404,body:''}));
     await page.evaluate(()=>window.__qa.openPanel(window.__qa.parcels.find(p=>p.b==='3608075')));
@@ -84,6 +114,6 @@ const root = path.resolve(__dirname, '..');
     assert.equal(await page.locator('.pnlcard').count(),0);
     assert(await page.locator('.pnlnote').isVisible());
     assert.deepEqual(errors,[]);
-    console.log('PASS: intro, year filters, undated images, missing assets, remote failures, failed last image, empty stack, upright 1/2/3/54-card transitions.');
+    console.log('PASS: intro, year filters, undated images, missing assets, remote failures, failed last image, empty stack, connected 3D 1/2/3/54-photo carousels, upright captions, separated desktop/tablet/mobile layouts.');
   } finally { await browser.close(); }
 })().catch(e=>{console.error(e);process.exitCode=1});

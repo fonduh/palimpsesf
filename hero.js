@@ -243,7 +243,7 @@ function zoomAt(mx,my,f){
 }
 addEventListener('wheel',e=>{
   if(PHASE!=='final')return;
-  if(panel.classList.contains('open')&&PST&&e.clientX>=innerWidth-panelW()){
+  if(panel.classList.contains('open')&&PST&&e.target.closest('#pnlstage')){
     e.preventDefault();
     pnlring.__acc=(pnlring.__acc||0)+e.deltaY;
     if(pnlring.__acc>60){ pnlring.__acc=0; rotateRing(PST.focus-1); }        // down → older
@@ -254,7 +254,7 @@ addEventListener('wheel',e=>{
   e.preventDefault();
   zoomAt(e.clientX,e.clientY,Math.exp(-e.deltaY*.0016));
 },{passive:false});
-const panelW=()=>Math.min(560,innerWidth*.94);
+let galleryBox={x:0,y:0,w:360,h:700};
 let dragV=null, dragEnded=0;
 addEventListener('pointerdown',e=>{
   if(PHASE!=='final'||!inMap(e.clientX,e.clientY))return;
@@ -312,20 +312,36 @@ function refineNow(){
 function buildScene(){
   DPR=Math.min(devicePixelRatio||1,2);
   cv.width=innerWidth*DPR; cv.height=innerHeight*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
-  // why-this-exists lives in a LEFT COLUMN; the map centers in the remaining width and
-  // only reserves headroom for the year sliders — so it runs noticeably larger
-  const mx=innerWidth*.04;
-  const colW=clamp(innerWidth*.20,230,330), colGap=30;
-  const topH=clamp(innerHeight*.13,92,132), botH=76;
-  const availW=innerWidth-mx*2-colW-colGap, availH=Math.max(120,innerHeight-topH-botH);
-  const ASPECT=1.083;   // (E−W)·cos(37.76°) / (N−S)
-  let mw=availW, mh=availW/ASPECT;
-  if(mh>availH){ mh=availH; mw=availH*ASPECT; }
-  mapBox={x:mx+colW+colGap+(availW-mw)/2, y:topH+(availH-mh)/2, w:mw, h:mh};
-  mapBox.colX=mx; mapBox.colW=colW;
+  // Independent description, map and photograph regions. Reserve the gallery even
+  // before a parcel is selected, so opening a wheel never covers or shrinks the map.
+  const narrow=innerWidth<720, tablet=innerWidth<1100;
+  const mx=narrow?16:clamp(innerWidth*.025,22,48), gap=narrow?16:24;
+  const colW=clamp(innerWidth*.17,180,270);
+  let area, why;
+  if(narrow){
+    why={x:mx,y:62,w:innerWidth-2*mx,h:84};
+    const mh=Math.min((innerWidth-2*mx)/1.083,innerHeight*.24);
+    area={x:mx,y:210,w:innerWidth-2*mx,h:mh};
+    galleryBox={x:mx,y:210+mh+68,w:innerWidth-2*mx,h:Math.max(180,innerHeight-(210+mh+68)-12)};
+  }else if(tablet){
+    why={x:mx,y:64,w:innerWidth-2*mx,h:100};
+    const gw=clamp(innerWidth*.43,300,430);
+    galleryBox={x:innerWidth-mx-gw,y:190,w:gw,h:innerHeight-206};
+    area={x:mx,y:234,w:innerWidth-2*mx-gw-gap,h:Math.max(160,innerHeight-316)};
+  }else{
+    why={x:mx,y:76,w:colW,h:innerHeight-108};
+    const gw=clamp(innerWidth*.29,340,480);
+    galleryBox={x:innerWidth-mx-gw,y:16,w:gw,h:innerHeight-32};
+    area={x:mx+colW+gap,y:110,w:galleryBox.x-gap-(mx+colW+gap),h:innerHeight-208};
+  }
+  const mw=Math.min(area.w,area.h*1.083), mh=mw/1.083;
+  mapBox={x:area.x+(area.w-mw)/2,y:area.y+(area.h-mh)/2,w:mw,h:mh,why};
+  pin.classList.toggle('compact',narrow);
+
   projectParcels();
   layoutUI();
   sizeReveal();
+  if(PST)layoutRing();
 }
 // ---------------- the MVP chrome: positioned off the map box ----------------------------------
 const whymod=document.getElementById('whymod'), yearbar=document.getElementById('yearbar'),
@@ -333,15 +349,20 @@ const whymod=document.getElementById('whymod'), yearbar=document.getElementById(
       logoEl=document.getElementById('logo'), zoomctl=document.getElementById('zoomctl');
 function layoutUI(){
   if(!whymod)return;
-  logoEl.style.left=(mapBox.colX+mapBox.colW/2)+'px'; logoEl.style.top='16px';
-  logoEl.style.transform='translateX(-50%)';     // centered directly above the why column
-  whymod.style.left=mapBox.colX+'px'; whymod.style.width=mapBox.colW+'px'; whymod.style.top='74px';
-  whymod.style.maxHeight=Math.max(120,innerHeight-76-74-8)+'px'; whymod.style.overflowY='auto';
+  const why=mapBox.why;
+  logoEl.style.left=why.x+'px'; logoEl.style.top='20px'; logoEl.style.transform='none';
+  whymod.style.left=why.x+'px'; whymod.style.width=why.w+'px'; whymod.style.top=why.y+'px';
+  whymod.style.maxHeight=why.h+'px'; whymod.style.overflowY='auto';
+  Object.assign(panel.style,{left:galleryBox.x+'px',top:galleryBox.y+'px',width:galleryBox.w+'px',height:galleryBox.h+'px'});
+  const hint=document.getElementById('galleryhint');
+  Object.assign(hint.style,{left:galleryBox.x+'px',top:(galleryBox.y+galleryBox.h/2)+'px',width:galleryBox.w+'px'});
+
   yearbar.style.left=mapBox.x+'px'; yearbar.style.width=mapBox.w+'px';
   yearbar.style.top=(mapBox.y-52)+'px';
+  if(innerWidth<720){yearbar.style.left=why.x+'px';yearbar.style.width=why.w+'px';yearbar.style.top=(mapBox.y-56)+'px';}
   zoomctl.style.left=(mapBox.x+mapBox.w-34)+'px'; zoomctl.style.top=(mapBox.y+10)+'px';
-  legend.style.left=mapBox.x+'px'; legend.style.top=(mapBox.y+mapBox.h+9)+'px';
-  if(mapcap){ mapcap.style.left=mapBox.x+'px'; mapcap.style.top=(mapBox.y+mapBox.h+27)+'px';
+  legend.style.left=mapBox.x+'px'; legend.style.width=mapBox.w+'px'; legend.style.top=(mapBox.y+mapBox.h+9)+'px';
+  if(mapcap){ mapcap.style.left=mapBox.x+'px'; mapcap.style.top=(mapBox.y+mapBox.h+(mapBox.w<400?43:27))+'px';
     mapcap.style.width=mapBox.w+'px'; mapcap.style.textAlign='left'; }   // sources under the legend
 }
 document.getElementById('zin').addEventListener('click',()=>zoomAt(mapBox.x+mapBox.w/2,mapBox.y+mapBox.h/2,1.6));
@@ -463,56 +484,24 @@ function drawCity(ts){
 // drawn with a slight sag so they read as thread, not leader lines. One bright thread to
 // the card facing you; faint ones gather to the neighbors, capped at 20 threads total.
 function drawThreads(){
-  const cy=innerHeight/2, ex=innerWidth-panelW()/2-163;   // cards' left edge
+  if(galleryBox.y>mapBox.y+mapBox.h)return;
+  const stage=document.getElementById('pnlstage').getBoundingClientRect();
+  const cy=stage.top+stage.height/2, ex=stage.left+stage.width/2-PST.cardW/2;
   const ax=sxOf(SEL.ucx), ay=syOf(SEL.ucy);
-  ctx.save();
-  ctx.fillStyle=BLUE; ctx.beginPath(); ctx.arc(ax,ay,2.6,0,6.284); ctx.fill();
-  const n=PST.es.length, maxT=Math.min(n,20);
-  const order=[PST.focus];
-  for(let d=1;order.length<maxT&&d<=n;d++){
-    if(PST.focus+d<n)order.push(PST.focus+d);
-    if(order.length<maxT&&PST.focus-d>=0)order.push(PST.focus-d);
-  }
-  ctx.strokeStyle=BLUE;
-  order.forEach((i,j)=>{
-    const rad=(i-PST.focus)*PST.step*Math.PI/180;
-    if(Math.abs(rad)>1.35)return;                          // folded into the wheel — no thread
+  if(!inMap(ax,ay))return;
+  ctx.save(); ctx.strokeStyle=BLUE; ctx.fillStyle=BLUE;
+  ctx.beginPath(); ctx.arc(ax,ay,2.6,0,6.284); ctx.fill();
+  for(let d=-1;d<=1;d++){
+    if(PST.focus+d<0||PST.focus+d>=PST.es.length)continue;
+    const rad=d*PST.step*Math.PI/180;
     const pf=1200/(1200+PST.R*(1-Math.cos(rad)));
     const ey=cy-Math.sin(rad)*PST.R*pf;
-    ctx.globalAlpha=j===0?.85:.14;
-    ctx.lineWidth=j===0?1.4:.8;
-    const mx=(ax+ex)/2, my=Math.max(ay,ey)+Math.hypot(ex-ax,ey-ay)*.055;
-    ctx.beginPath(); ctx.moveTo(ax,ay); ctx.quadraticCurveTo(mx,my,ex,ey); ctx.stroke();
-    if(j===0){
-      // the tag sits NEXT TO the carousel on a pastel plate — the text never has to
-      // fight the basemap:  parcel 0349010A (italic) / neighborhood / street
-      const lines=[['parcel '+SEL.b,true]];
-      if(SEL.hood)lines.push([SEL.hood.toLowerCase(),false]);
-      const st=SEL.street||(SEL.lm&&SEL.lm.address)||'';
-      if(st)lines.push([st.toLowerCase(),false]);
-      const LH=14, PADX=10, PADY=8;
-      let w=0;
-      lines.forEach(([txt,ital])=>{
-        ctx.font=(ital?'italic ':'')+'9.5px Whois, monospace';
-        w=Math.max(w,ctx.measureText(txt).width);
-      });
-      const bw=w+PADX*2, bh=lines.length*LH+PADY*2-4;
-      const bx2=ex-14-bw, by2=ey-bh/2;             // plate hugs the cards, tag inside it
-      ctx.globalAlpha=.93; ctx.fillStyle='#eaf1fb';
-      ctx.fillRect(bx2,by2,bw,bh);
-      ctx.globalAlpha=1; ctx.lineWidth=1; ctx.strokeStyle=BLUE;
-      ctx.strokeRect(bx2+.5,by2+.5,bw-1,bh-1);
-      ctx.textAlign='left';
-      let ly=by2+PADY+9;
-      lines.forEach(([txt,ital])=>{
-        ctx.font=(ital?'italic ':'')+'9.5px Whois, monospace';
-        ctx.fillStyle=BLUE; ctx.fillText(txt,bx2+PADX,ly);
-        ly+=LH;
-      });
-      ctx.textAlign='start';
-    }
-  });
-  ctx.restore(); ctx.globalAlpha=1;
+    if(ey<stage.top||ey>stage.bottom)continue;
+    ctx.globalAlpha=d===0?.7:.13;ctx.lineWidth=d===0?1.2:.7;
+    ctx.beginPath();ctx.moveTo(ax,ay);
+    ctx.bezierCurveTo(mapBox.x+mapBox.w,ay,ex-24,ey,ex,ey);ctx.stroke();
+  }
+  ctx.restore();
 }
 
 // ---------------- the atlas: the gray city basemap under the paper ----------------------------
@@ -693,6 +682,7 @@ function openPanel(p){
     ? (p.lm.landmarkno==='curated'?'curated place':'sf landmark #'+p.lm.landmarkno)+' · parcel '+p.b
     : 'parcel '+p.b;
   pnlname.textContent=p.lm?p.lm.name:'';
+  document.getElementById('pnllocation').textContent=[p.hood,p.street||(p.lm&&p.lm.address)].filter(Boolean).join(' · ');
   if(p.lm){                                        // landmarks: full detail, collapsible
     pnldetail.style.display='block';
     const l=p.lm;
@@ -710,24 +700,18 @@ function openPanel(p){
   }
   buildRing(pnlEntries(p));
   panel.classList.add('open');
-  // if the lot would hide under the floating photographs, walk the view left until the
-  // parcel — and its tag — stand clear of the stack
-  const limit=innerWidth-panelW()-110;
-  if(sxOf(p.ucx)>limit){
-    if(VIEW.k<2.4)VIEW.k=2.4;
-    VIEW.tx=.34-p.ucx*VIEW.k;
-    VIEW.ty=.5-p.ucy*VIEW.k;
-    clampView(); refineSoon();
-  }
+  document.getElementById('galleryhint').style.visibility='hidden';
 }
 function buildRing(es){
+  // A new parcel (or an empty result) should not rotate through the previous wheel.
+  pnlring.style.transition='none';
   if(!es.length){
     pnlring.style.transform='none';
     pnlring.innerHTML='<div class="pnlnote">no photographs available in this year range —<br>try another parcel or widen the sliders</div>';
-    PST=null; updRingNav(); return;
+    PST=null; document.getElementById('pnlcaption').replaceChildren(); updRingNav(); return;
   }
-  const n=es.length, step=Math.min(30,360/n), R=Math.max(250,Math.round(188/Math.tan(step*Math.PI/360)));
-  PST={es,focus:n-1,step,R};   // enter at the newest — scrolling down digs older
+  const n=es.length, step=360/Math.max(n,8);
+  PST={es,focus:n-1,step,R:0,cardW:0,cardH:0};   // enter at the newest — scrolling down digs older
   // cards are born WITHOUT src: only the wheel-window around the focus fetches (hydrateCards).
   // A 54-photo parcel used to fire 54 requests at once and the front card queued behind
   // 53 others it was hiding — now the visible few load first and the rest load as you turn.
@@ -735,10 +719,10 @@ function buildRing(es){
     '<div class="pnlcard" data-i="'+i+'">'
     +'<img decoding="async" alt="" data-src="'+escH(e.u)+'" '
     +'onload="this.classList.add(\'ld\')" onerror="window.__mvpDrop(this.dataset.src)">'
-    +'<div class="pyr">'+(e.now?'now':(e.y||'·'))+'</div>'
-    +'<div class="pcap">'+escH(e.cap||'')+'</div>'
-    +'<div class="psrc">photograph: '+escH(e.src||'')+'</div></div>').join('');
+    +'</div>').join('');
   layoutRing(); updRingNav();
+  void pnlring.offsetHeight;
+  pnlring.style.transition='';
 }
 let warmT=null;
 function hydrateCards(){
@@ -759,20 +743,29 @@ function hydrateCards(){
 }
 function layoutRing(){
   if(!PST)return;
+  const stage=document.getElementById('pnlstage');
+  const cardW=Math.min(330,galleryBox.w-24,Math.max(110,stage.clientHeight*.95));
+  const cardH=cardW*2/3;
+  // Apothem of the polygonal wheel: adjacent photographs meet edge to edge.
+  const R=cardH/(2*Math.tan(PST.step*Math.PI/360));
+  Object.assign(PST,{R,cardW,cardH});
+  pnlring.style.setProperty('--card-w',cardW+'px');
+  pnlring.style.setProperty('--card-h',cardH+'px');
   [...pnlring.children].forEach(c=>{
     const i=+c.dataset.i, d=i-PST.focus;
-    // Move along the wheel without rotating the card's reading plane. This also
-    // keeps one-, two- and three-photo stacks upright throughout transitions.
-    const angle=clamp(d*PST.step,-90,90)*Math.PI/180;
-    c.style.transform='translate3d(0,'+(-Math.sin(angle)*PST.R)+'px,'+(PST.R*(Math.cos(angle)-1))+'px)';
+    c.style.transform='rotateX('+(i*PST.step)+'deg) translateZ('+R+'px)';
     c.classList.toggle('front',d===0);
-    const o=Math.abs(d*PST.step)>=90?0:d===0?1:Math.abs(d)===1?.5:Math.abs(d)===2?.24:Math.abs(d)===3?.1:0;
-    c.style.opacity=o;
-    c.style.pointerEvents=o>0?'auto':'none';
+    c.style.setProperty('--shade',Math.min(.28,Math.abs(d)*.08));
+    c.style.opacity=Math.abs(d*PST.step)<100?1:0;
+    c.style.pointerEvents=Math.abs(d*PST.step)<90?'auto':'none';
   });
-  pnlring.style.transform='none';
+  pnlring.style.transform='translateZ('+(-R)+'px) rotateX('+(-PST.focus*PST.step)+'deg)';
+  const e=PST.es[PST.focus];
+  document.getElementById('pnlcaption').innerHTML='<div class="pyr">'+(e.now?'now':(e.y||'undated'))+'</div>'
+    +'<div class="pcap">'+escH(e.cap)+'</div><div class="psrc">photograph: '+escH(e.src)+'</div>';
   hydrateCards();
 }
+
 function rotateRing(to){
   if(!PST)return;
   PST.focus=clamp(to,0,PST.es.length-1);         // the ends are ends — no wrap
@@ -813,7 +806,9 @@ window.__mvpDrop=u=>{
 };
 pnlolder.addEventListener('click',()=>rotateRing(PST?PST.focus-1:0));
 pnlnewer.addEventListener('click',()=>rotateRing(PST?PST.focus+1:0));
-document.getElementById('pnlclose').addEventListener('click',()=>panel.classList.remove('open'));
+document.getElementById('pnlclose').addEventListener('click',()=>{
+  panel.classList.remove('open'); document.getElementById('galleryhint').style.visibility='';
+});
 pnlring.addEventListener('click',e=>{
   const c=e.target.closest('.pnlcard');
   if(c&&PST)rotateRing(+c.dataset.i===PST.focus?PST.focus+1:+c.dataset.i);
